@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@radix-ui/themes/styles.css";
-import { Container, Theme } from "@radix-ui/themes";
+import { Box, Theme } from "@radix-ui/themes";
 import "./globals.css";
 import Navbar from "./Navbar";
 
@@ -23,7 +23,7 @@ export default function RootLayout({
         <Theme appearance="light" grayColor="sand">
           <main>
             <Navbar />
-            <Container>{children}</Container>
+            <Box>{children}</Box>
           </main>
         </Theme>
       </body>
