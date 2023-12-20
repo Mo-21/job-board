@@ -1,8 +1,9 @@
 import { prisma } from "@/prisma/client";
-import { Badge, Card, Flex, Heading, Text } from "@radix-ui/themes";
+import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import React from "react";
 import LevelBadge from "../components/LevelBadge";
-import { format } from "timeago.js";
+import DateFormatted from "../components/DateFormatted";
+import Link from "next/link";
 
 const page = async () => {
   const jobs = await prisma.job.findMany();
@@ -11,10 +12,12 @@ const page = async () => {
       {jobs.map((job) => (
         <Card key={job.id} className="m-4 p-2 max-w-sm">
           <Flex direction="column" gap="3" align="start">
-            <Heading>{job.title}</Heading>
+            <Link href={`/jobs/${job.id}`}>
+              <Heading>{job.title}</Heading>
+            </Link>
             <LevelBadge level={job.level} />
-            <Text>{job.description}</Text>
-            <Text>{format(job.createdAt)}</Text>
+            <Text>{job.qualifications}</Text>
+            <DateFormatted date={job.createdAt} />
           </Flex>
         </Card>
       ))}
