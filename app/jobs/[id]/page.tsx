@@ -1,14 +1,5 @@
 import { prisma } from "@/prisma/client";
-import {
-  Box,
-  Button,
-  Card,
-  Container,
-  Flex,
-  Grid,
-  Heading,
-  Text,
-} from "@radix-ui/themes";
+import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import React from "react";
 import NotFoundJobPage from "./not-found";
 import LevelBadge from "@/app/components/LevelBadge";
