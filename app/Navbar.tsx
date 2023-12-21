@@ -6,6 +6,8 @@ import Link from "next/link";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Navbar = () => {
   return (
@@ -62,7 +64,7 @@ const NavbarLinks = () => {
 const UserAvatar = () => {
   const { status, data: session } = useSession();
 
-  if (status === "loading") return <h2>Loading...</h2>;
+  if (status === "loading") return <Skeleton width="2rem" />;
 
   return (
     <>
