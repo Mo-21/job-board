@@ -15,6 +15,7 @@ model Job {
   title          String   @db.String
   description    String   @db.String
   qualifications String   @db.String
+  skills         String[] @db.String
   level          Level
   company        String   @db.String
   location       String   @db.String
