@@ -1,10 +1,11 @@
 "use client";
-import { Flex } from "@radix-ui/themes";
+import { Avatar, DropdownMenu, Flex } from "@radix-ui/themes";
 import { BsPersonCheckFill } from "react-icons/bs";
 import React from "react";
 import Link from "next/link";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
   return (
@@ -13,7 +14,7 @@ const Navbar = () => {
         <Flex gap="4">
           <NavbarLinks />
         </Flex>
-        <div>User Image</div>
+        <UserAvatar />
       </Flex>
     </nav>
   );
@@ -54,6 +55,37 @@ const NavbarLinks = () => {
           </li>
         ))}
       </ul>
+    </>
+  );
+};
+
+const UserAvatar = () => {
+  const { status, data: session } = useSession();
+
+  if (status === "loading") return <h2>Loading...</h2>;
+
+  return (
+    <>
+      {session && status === "authenticated" ? (
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Avatar
+              src={session?.user?.image!}
+              fallback="?"
+              variant="soft"
+              radius="full"
+              size="4"
+              className="cursor-pointer"
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            <DropdownMenu.Label>{session.user?.email}</DropdownMenu.Label>
+            <DropdownMenu.Label>{session.user?.name}</DropdownMenu.Label>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      ) : (
+        <Link href="/api/auth/signin">Login</Link>
+      )}
     </>
   );
 };
