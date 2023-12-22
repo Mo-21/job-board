@@ -1,11 +1,10 @@
 "use client";
 import { Avatar, DropdownMenu, Flex } from "@radix-ui/themes";
-import { BsPersonCheckFill } from "react-icons/bs";
-import React from "react";
-import Link from "next/link";
 import classNames from "classnames";
-import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { BsPersonCheckFill } from "react-icons/bs";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
