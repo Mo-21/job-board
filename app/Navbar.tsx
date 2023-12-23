@@ -1,5 +1,5 @@
 "use client";
-import { Avatar, DropdownMenu, Flex } from "@radix-ui/themes";
+import { Avatar, Button, DropdownMenu, Flex } from "@radix-ui/themes";
 import classNames from "classnames";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -82,6 +82,9 @@ const UserAvatar = () => {
           <DropdownMenu.Content>
             <DropdownMenu.Label>{session.user?.email}</DropdownMenu.Label>
             <DropdownMenu.Label>{session.user?.name}</DropdownMenu.Label>
+            <DropdownMenu.Item>
+              <Link href="/api/auth/signout">Logout</Link>
+            </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       ) : (
