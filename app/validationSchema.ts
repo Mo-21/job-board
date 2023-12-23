@@ -28,3 +28,5 @@ export const registerSchema = z
   .refine((data) => data.password === data.passwordConfirmation, {
     message: "Passwords must match",
   });
+
+export type RegistrationFormType = z.infer<typeof registerSchema>;
