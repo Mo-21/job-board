@@ -25,11 +25,75 @@ model Job {
   userId         String?  @db.ObjectId
 }
 
+model User {
+  id             String            @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?           @unique
+  emailVerified  DateTime?
+  hashedPassword String?
+  image          String?
+  location       String?
+  bio            String?
+  projects       Project[]
+  workExperience Work_Experience[]
+  education      Education[]
+  links          Links?
+  accounts       Account[]
+  sessions       Session[]
+  jobsApplied    Job[]
+}
+
+model Project {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String   @db.String
+  description String   @db.String
+  skills      String[] @db.String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?  @db.ObjectId
+}
+
+model Work_Experience {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String   @db.String
+  company     String   @db.String
+  location    String   @db.String
+  startDate   DateTime @default(now())
+  endDate     DateTime @default(now())
+  description String   @db.String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?  @db.ObjectId
+}
+
+model Education {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  school      String   @db.String
+  degree      String   @db.String
+  field       String   @db.String
+  startDate   DateTime @default(now())
+  endDate     DateTime @default(now())
+  description String   @db.String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?  @db.ObjectId
+}
+
 enum Level {
   JUNIOR
   MIDDLE
   SENIOR
   MANAGER
+}
+
+type Links {
+  github   String
+  linkedin String
+  twitter  String
+  website  String
 }
 
 model Account {
@@ -56,18 +120,6 @@ model Session {
   userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  name           String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  hashedPassword String?
-  image          String?
-  accounts       Account[]
-  sessions       Session[]
-  jobsApplied    Job[]
 }
 
 model VerificationToken {
