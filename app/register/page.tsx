@@ -57,7 +57,7 @@ const Register = () => {
           .finally(() => {
             setIsLoading(false);
           });
-        console.log(data);
+        router.push("/api/auth/signin");
       } catch (error) {
         console.log(error);
       }
@@ -186,7 +186,13 @@ const UploadPage = ({ register, setValue }: UploadPageProps) => {
   return (
     <div>
       {publicId ? (
-        <CldImage src={publicId} width={120} height={126} alt="image" />
+        <CldImage
+          crop="fill"
+          src={publicId}
+          width={120}
+          height={120}
+          alt="image"
+        />
       ) : (
         <Image width={120} src={defaultImage} alt="image" />
       )}
@@ -202,10 +208,21 @@ const UploadPage = ({ register, setValue }: UploadPageProps) => {
           sources: ["local"],
           maxFiles: 1,
           multiple: false,
+          cropping: true,
+          croppingAspectRatio: 1,
+          showSkipCropButton: false,
         }}
       >
         {({ open }) => (
-          <Button onClick={() => open()} my="3" size="3" color="green">
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              open();
+            }}
+            my="3"
+            size="3"
+            color="green"
+          >
             Upload Image
           </Button>
         )}
