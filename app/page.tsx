@@ -1,13 +1,35 @@
 "use client";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import ErrorCallout from "./components/ErrorCallout";
+import { Link } from "@radix-ui/themes";
 
 export default function Home() {
   const { status, data: session } = useSession();
+  const [callout, setCallout] = useState(false);
 
-  // if (status === "unauthenticated") return null;
+  useEffect(() => {
+    if (!session?.user?.accountComplete) setCallout(true);
+  }, [session]);
 
-  // if(session?.user)
-  console.log(session);
+  if (status === "unauthenticated") return null;
 
-  return <h1>Home</h1>;
+  return (
+    <>
+      {callout && (
+        <div className="px-5 py-3">
+          <ErrorCallout>
+            {`Hello ${session?.user?.name?.split(
+              " ",
+              1
+            )}, please update your profile to start applying for jobs. You can update it from`}{" "}
+            <Link href="/profile">here</Link>
+          </ErrorCallout>
+        </div>
+      )}
+      <h1>Home</h1>
+      <Toaster />
+    </>
+  );
 }
