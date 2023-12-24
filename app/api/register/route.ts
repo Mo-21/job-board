@@ -6,9 +6,13 @@ import bcrypt from "bcrypt";
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
+  console.log(body);
   const validation = registerSchema.safeParse(body);
   if (!validation.success) {
-    return NextResponse.json(validation.error.errors, { status: 400 });
+    return NextResponse.json(
+      { error: validation.error.errors },
+      { status: 400 }
+    );
   }
 
   const { firstName, lastName, email, password } = validation.data;
@@ -29,7 +33,7 @@ export async function POST(request: NextRequest) {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newUser = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name: `${firstName} ${lastName}`,
       email,
@@ -37,5 +41,5 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  return NextResponse.json(newUser, { status: 201 });
+  return NextResponse.json({ status: 201 });
 }
