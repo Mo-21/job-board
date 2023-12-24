@@ -45,6 +45,27 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  callbacks: {
+    async session({ session, user }) {
+      const fullUser = await prisma.user.findUnique({
+        where: {
+          email: session.user?.email!,
+        },
+        select: {
+          email: true,
+          name: true,
+          image: true,
+          accountComplete: true,
+        },
+      });
+
+      if (fullUser) {
+        session.user = fullUser;
+      }
+
+      return session;
+    },
+  },
   session: {
     strategy: "jwt",
   },
