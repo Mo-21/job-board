@@ -35,6 +35,7 @@ export const registerSchema = z.object({
       message: "Password must contain at least one special character",
     }),
   passwordConfirmation: z.string().min(1, "Password Confirmation is Required"),
+  image: z.string().optional().nullable(),
 });
 
 export const validatePasswords = (data: RegistrationFormType) => {
