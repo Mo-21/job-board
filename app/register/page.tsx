@@ -3,48 +3,58 @@ import { Button, Card, Heading, Flex } from "@radix-ui/themes";
 import styles from "../styles/RegisterPage.module.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegistrationFormType, registerSchema } from "../validationSchema";
+import {
+  RegistrationFormType,
+  registerSchema,
+  validatePasswords,
+} from "../validationSchema";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import Spinner from "../components/Spinner";
 import ErrorCallout from "../components/ErrorCallout";
 import { useState } from "react";
-import { set } from "zod";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordMatch, setPasswordMatch] = useState<Boolean>();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<RegistrationFormType>({
     resolver: zodResolver(registerSchema),
+    mode: "onChange",
   });
 
   const router = useRouter();
 
-  const handleFormSubmission: SubmitHandler<RegistrationFormType> = async (
-    data,
-    e
-  ) => {
+  const onSubmit: SubmitHandler<RegistrationFormType> = async (data, e) => {
+    setIsLoading(true);
     e?.preventDefault();
-    try {
-      setIsLoading(true);
-      await axios
-        .post("/api/register", data)
-        .catch((error) => {
-          toast.error("Something went wrong");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-      toast.success("Account created successfully");
-      router.push("/api/auth/signin");
-    } catch (error) {
-      console.log(error);
+    if (validatePasswords(data) === false) {
+      setPasswordMatch(false);
+      return;
+    } else {
+      try {
+        setPasswordMatch(true);
+        const res = await axios
+          .post("/api/register", data)
+          .catch((err) => {
+            console.log(err);
+            toast.error(err.response.data.error);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
+
   const inputClass =
     "w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3";
 
@@ -57,7 +67,7 @@ const Register = () => {
     >
       <Card variant="surface" color="indigo" className={styles.card}>
         <Heading mb="3">Register</Heading>
-        <form onSubmit={handleSubmit(handleFormSubmission)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex gap-3 w-auto">
             <input
               placeholder="First Name"
@@ -112,7 +122,11 @@ const Register = () => {
             <ErrorCallout>{errors.passwordConfirmation.message}</ErrorCallout>
           )}
 
-          <Button disabled={isLoading} size="3">
+          {passwordMatch === false && (
+            <ErrorCallout>{"Passwords do not match"}</ErrorCallout>
+          )}
+
+          <Button disabled={isLoading} type="submit" size="3">
             {isLoading && <Spinner />}
             Join
           </Button>
