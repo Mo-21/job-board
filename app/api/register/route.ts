@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
       email,
       hashedPassword,
       image,
+      accountComplete: false,
     },
   });
 
