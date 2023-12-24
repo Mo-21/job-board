@@ -6,7 +6,6 @@ import bcrypt from "bcrypt";
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
-  console.log(body);
   const validation = registerSchema.safeParse(body);
   if (!validation.success) {
     return NextResponse.json(
@@ -15,7 +14,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { firstName, lastName, email, password } = validation.data;
+  const { firstName, lastName, email, password, image } = validation.data;
 
   const user = await prisma.user.findUnique({
     where: {
@@ -38,6 +37,7 @@ export async function POST(request: NextRequest) {
       name: `${firstName} ${lastName}`,
       email,
       hashedPassword,
+      image,
     },
   });
 
