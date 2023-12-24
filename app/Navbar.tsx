@@ -2,6 +2,7 @@
 import { Avatar, Button, DropdownMenu, Flex } from "@radix-ui/themes";
 import classNames from "classnames";
 import { useSession } from "next-auth/react";
+import { CldImage } from "next-cloudinary";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BsPersonCheckFill } from "react-icons/bs";
@@ -70,14 +71,26 @@ const UserAvatar = () => {
       {session && status === "authenticated" ? (
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            <Avatar
-              src={session?.user?.image!}
-              fallback="?"
-              variant="soft"
-              radius="full"
-              size="4"
-              className="cursor-pointer"
-            />
+            {session.user?.image?.startsWith("https") ? (
+              <Avatar
+                src={session?.user?.image!}
+                fallback="?"
+                variant="soft"
+                radius="full"
+                size="4"
+                alt="user-image"
+                className="cursor-pointer"
+              />
+            ) : (
+              <CldImage
+                width={48}
+                height={48}
+                crop="fill"
+                className="rounded-full cursor-pointer"
+                src={session.user?.image!}
+                alt="user-image"
+              />
+            )}
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
             <DropdownMenu.Label>{session.user?.email}</DropdownMenu.Label>
