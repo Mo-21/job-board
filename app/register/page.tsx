@@ -1,7 +1,12 @@
 "use client";
 import { Button, Card, Heading, Flex } from "@radix-ui/themes";
 import styles from "../styles/RegisterPage.module.css";
-import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  SubmitHandler,
+  UseFormRegister,
+  UseFormSetValue,
+  useForm,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   RegistrationFormType,
@@ -14,6 +19,9 @@ import toast, { Toaster } from "react-hot-toast";
 import Spinner from "../components/Spinner";
 import ErrorCallout from "../components/ErrorCallout";
 import { useState } from "react";
+import { CldImage, CldUploadWidget } from "next-cloudinary";
+import defaultImage from "@/public/default.png";
+import Image from "next/image";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +30,7 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<RegistrationFormType>({
     resolver: zodResolver(registerSchema),
@@ -39,7 +48,7 @@ const Register = () => {
     } else {
       try {
         setPasswordMatch(true);
-        const res = await axios
+        await axios
           .post("/api/register", data)
           .catch((err) => {
             console.log(err);
@@ -48,7 +57,7 @@ const Register = () => {
           .finally(() => {
             setIsLoading(false);
           });
-        console.log(res);
+        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -67,8 +76,12 @@ const Register = () => {
     >
       <Card variant="surface" color="indigo" className={styles.card}>
         <Heading mb="3">Register</Heading>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex gap-3 w-auto">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-rows-auto grid-cols-2"
+        >
+          <UploadPage register={register} setValue={setValue} />
+          <div className="flex flex-col justify-center w-auto col-start-2">
             <input
               placeholder="First Name"
               className={inputClass}
@@ -79,7 +92,6 @@ const Register = () => {
             {errors.firstName && (
               <ErrorCallout>{errors.firstName.message}</ErrorCallout>
             )}
-
             <input
               placeholder="Last Name"
               className={inputClass}
@@ -90,43 +102,51 @@ const Register = () => {
             {errors.lastName && (
               <ErrorCallout>{errors.lastName.message}</ErrorCallout>
             )}
+
+            <input
+              placeholder="Email"
+              className={inputClass}
+              type="email"
+              required
+              {...register("email")}
+            />
+            {errors.email && (
+              <ErrorCallout>{errors.email.message}</ErrorCallout>
+            )}
+
+            <input
+              placeholder="Password"
+              className={inputClass}
+              type="password"
+              required
+              {...register("password")}
+            />
+            {errors.password && (
+              <ErrorCallout>{errors.password.message}</ErrorCallout>
+            )}
+
+            <input
+              placeholder="Repeat Password"
+              className={inputClass}
+              type="password"
+              required
+              {...register("passwordConfirmation")}
+            />
+            {errors.passwordConfirmation && (
+              <ErrorCallout>{errors.passwordConfirmation.message}</ErrorCallout>
+            )}
+
+            {passwordMatch === false && (
+              <ErrorCallout>{"Passwords do not match"}</ErrorCallout>
+            )}
           </div>
-          <input
-            placeholder="Email"
-            className={inputClass}
-            type="email"
-            required
-            {...register("email")}
-          />
-          {errors.email && <ErrorCallout>{errors.email.message}</ErrorCallout>}
 
-          <input
-            placeholder="Password"
-            className={inputClass}
-            type="password"
-            required
-            {...register("password")}
-          />
-          {errors.password && (
-            <ErrorCallout>{errors.password.message}</ErrorCallout>
-          )}
-
-          <input
-            placeholder="Repeat Password"
-            className={inputClass}
-            type="password"
-            required
-            {...register("passwordConfirmation")}
-          />
-          {errors.passwordConfirmation && (
-            <ErrorCallout>{errors.passwordConfirmation.message}</ErrorCallout>
-          )}
-
-          {passwordMatch === false && (
-            <ErrorCallout>{"Passwords do not match"}</ErrorCallout>
-          )}
-
-          <Button disabled={isLoading} type="submit" size="3">
+          <Button
+            className="col-span-2"
+            disabled={isLoading}
+            type="submit"
+            size="4"
+          >
             {isLoading && <Spinner />}
             Join
           </Button>
@@ -134,6 +154,63 @@ const Register = () => {
       </Card>
       <Toaster />
     </Flex>
+  );
+};
+
+interface CloudinaryResult {
+  public_id: string;
+}
+
+interface UploadPageProps {
+  register: UseFormRegister<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+    image?: string | null | undefined;
+  }>;
+  setValue: UseFormSetValue<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+    image?: string | null | undefined;
+  }>;
+}
+
+const UploadPage = ({ register, setValue }: UploadPageProps) => {
+  const [publicId, setPublicId] = useState("");
+
+  return (
+    <div>
+      {publicId ? (
+        <CldImage src={publicId} width={120} height={126} alt="image" />
+      ) : (
+        <Image width={120} src={defaultImage} alt="image" />
+      )}
+
+      <CldUploadWidget
+        uploadPreset="j5wl1xz7"
+        onUpload={(result, widget) => {
+          const info = result.info as CloudinaryResult;
+          setPublicId(info.public_id);
+          setValue("image", info.public_id);
+        }}
+        options={{
+          sources: ["local"],
+          maxFiles: 1,
+          multiple: false,
+        }}
+      >
+        {({ open }) => (
+          <Button onClick={() => open()} my="3" size="3" color="green">
+            Upload Image
+          </Button>
+        )}
+      </CldUploadWidget>
+    </div>
   );
 };
 
