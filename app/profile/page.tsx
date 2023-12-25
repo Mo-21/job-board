@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileCreation from "./ProfileForm";
+import ProfileCreation from "./ProfileCompletion";
 
 const Profile = () => {
   return <ProfileCreation />;
