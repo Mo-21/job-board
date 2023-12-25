@@ -35,6 +35,7 @@ model User {
   image           String?
   location        String?
   bio             String?
+  skills          String[]
   projects        Project[]
   workExperience  Work_Experience[]
   education       Education[]
