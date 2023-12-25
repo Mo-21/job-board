@@ -38,6 +38,52 @@ export const registerSchema = z.object({
   image: z.string().optional().nullable(),
 });
 
+const linkSchema = z
+  .string()
+  .max(255, "Maximum 255 Characters Allowed")
+  .optional()
+  .nullable();
+
+export const profileCreationSchema = z.object({
+  bio: z.string().max(255).optional().nullable(),
+  location: z
+    .string()
+    .min(1, "Location is Required")
+    .max(255)
+    .regex(/^[a-zA-Z]*$/, {
+      message: "Location must contain only English alphabets",
+    }),
+  projects: z.array(z.string()).min(1, "Projects is Required").max(5),
+  skills: z.array(z.string()).min(1, "Skills is Required").max(10),
+  workExperience: z
+    .array(
+      z.object({
+        title: z.string().min(1, "Title is Required").max(255),
+        company: z.string().min(1, "Company is Required").max(255),
+        description: z.string().max(255).optional().nullable(),
+        startDate: z.string().min(1, "Start Date is Required").max(255),
+        endDate: z.string().min(1, "End Date is Required").max(255),
+      })
+    )
+    .max(2, "Only 2 Work Experiences are Allowed"),
+  education: z
+    .array(
+      z.object({
+        school: z.string().min(1, "School is Required").max(255),
+        degree: z.string().min(1, "Degree is Required").max(255),
+        location: z.string().min(1, "Location is Required").max(255),
+        startDate: z.string(),
+        endDate: z.string(),
+      })
+    )
+    .max(2, "Only 2 Education Experiences are Allowed"),
+  links: z.object({
+    linkedin: linkSchema,
+    github: linkSchema,
+    portfolio: linkSchema,
+  }),
+});
+
 export const validatePasswords = (data: RegistrationFormType) => {
   try {
     registerSchema.parse(data);
@@ -49,3 +95,4 @@ export const validatePasswords = (data: RegistrationFormType) => {
 };
 
 export type RegistrationFormType = z.infer<typeof registerSchema>;
+export type ProfileCreationFormType = z.infer<typeof profileCreationSchema>;
