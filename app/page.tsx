@@ -1,7 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 import ErrorCallout from "./components/ErrorCallout";
 import { Link } from "@radix-ui/themes";
 
@@ -10,7 +9,8 @@ export default function Home() {
   const [callout, setCallout] = useState(false);
 
   useEffect(() => {
-    if (!session?.user?.accountComplete) setCallout(true);
+    if (session?.user && session?.user?.accountComplete === false)
+      setCallout(true);
   }, [session]);
 
   if (status === "unauthenticated") return null;
@@ -29,7 +29,6 @@ export default function Home() {
         </div>
       )}
       <h1>Home</h1>
-      <Toaster />
     </>
   );
 }
