@@ -2,13 +2,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, Box, Heading, Flex, Button } from "@radix-ui/themes";
 import classNames from "classnames";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import {
   useForm,
   useFieldArray,
   UseFormRegister,
   FieldErrors,
   Control,
+  SubmitHandler,
+  UseFormSetValue,
 } from "react-hook-form";
 import ErrorCallout from "../components/ErrorCallout";
 import {
@@ -18,6 +20,8 @@ import {
 import { Props } from "./ProfileCompletion";
 import styles from "../styles/ProfileForm.module.css";
 import { Session } from "next-auth";
+import Spinner from "../components/Spinner";
+import SelectMenu from "../components/SkillsSelect";
 
 const inputClass =
   "w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3 h-9";
@@ -42,35 +46,44 @@ interface FormProps {
       startDate: string;
       endDate: string;
     }[];
+    projects: {
+      title: string;
+      description: string;
+      skills: string[];
+    }[];
   };
 }
 
 const ProfileCompletionForm = ({ page, session }: Props) => {
-  const [currentPage, setCurrentPage] = useState(page);
-  const [workBlock, setWorkBlock] = useState<number>(1);
+  const [workBlock, setWorkBlock] = useState(1);
   const [educationBlock, setEducationBlock] = useState(1);
-
-  useEffect(() => {
-    setCurrentPage(page);
-  }, [page]);
+  const [projectBlock, setProjectBlock] = useState(1);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const defaultValues = {
     education: [
       {
-        school: "",
-        degree: "",
-        location: "",
+        school: "Oxford",
+        degree: "Diploma",
+        location: "London",
         startDate: Date.now().toLocaleString(),
         endDate: Date.now().toLocaleString(),
       },
     ],
     workExperience: [
       {
-        title: "",
-        company: "",
-        description: "",
+        title: "Intern",
+        company: "X",
+        description: "Very nice internship",
         startDate: Date.now().toLocaleString(),
         endDate: Date.now().toLocaleString(),
+      },
+    ],
+    projects: [
+      {
+        title: "",
+        description: "Very nice internship",
+        skills: ["HTML", "CSS"],
       },
     ],
   };
@@ -79,6 +92,7 @@ const ProfileCompletionForm = ({ page, session }: Props) => {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<ProfileCreationFormType>({
     resolver: zodResolver(profileCreationSchema),
@@ -86,24 +100,40 @@ const ProfileCompletionForm = ({ page, session }: Props) => {
     defaultValues,
   });
 
+  const onSubmit: SubmitHandler<ProfileCreationFormType> = async (data, e) => {
+    e?.preventDefault();
+    console.log(data);
+  };
+
   return (
     <Card
       className={classNames({
         [styles.page_container]: true,
-        [styles.active]: currentPage === page,
+        [styles.active]: page === page,
       })}
     >
-      <form className={styles.form_group}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form_group}>
         <Box className={styles.input_container}>
-          {currentPage === 1 && (
+          {page === 1 && (
             <PersonalInfo
               register={register}
               errors={errors}
               session={session}
             />
           )}
+          {page === 2 && (
+            <Projects
+              register={register}
+              errors={errors}
+              control={control}
+              projectBlock={projectBlock}
+              setProjectBlock={setProjectBlock}
+              setValue={setValue}
+              defaultValues={defaultValues}
+            />
+          )}
 
-          {currentPage === 2 && (
+          {page === 3 && (
             <Education
               register={register}
               errors={errors}
@@ -114,7 +144,7 @@ const ProfileCompletionForm = ({ page, session }: Props) => {
             />
           )}
 
-          {currentPage === 3 && (
+          {page === 4 && (
             <WorkExperience
               register={register}
               errors={errors}
@@ -125,29 +155,49 @@ const ProfileCompletionForm = ({ page, session }: Props) => {
             />
           )}
 
-          {currentPage === 4 && <Links register={register} errors={errors} />}
+          {page === 5 && (
+            <>
+              <Box>
+                <Heading mb="5">Skills</Heading>
+                <SelectMenu setValue={setValue} />
+                {errors.skills && (
+                  <ErrorCallout>{errors?.skills?.message}</ErrorCallout>
+                )}
+              </Box>
+              <Links register={register} errors={errors} />
+            </>
+          )}
         </Box>
+
+        {page === 5 && (
+          <Button
+            type="submit"
+            color="green"
+            className={styles.next_button}
+            onClick={() => setIsSubmitted(true)}
+          >
+            {isSubmitted && <Spinner />}
+            Submit
+          </Button>
+        )}
       </form>
     </Card>
   );
 };
 
-const PersonalInfo = ({ session, register }: FormProps) => {
+const PersonalInfo = ({ session, register, errors }: FormProps) => {
   return (
     <>
       <Heading mb="5">Personal Information</Heading>
       <input
         type="text"
-        value={session?.user?.name!}
         placeholder="Name"
         className={inputClass}
+        defaultValue={session?.user?.name!}
+        {...register("name")}
       />
-      <input
-        type="email"
-        value={session?.user?.email!}
-        placeholder="Email"
-        className={inputClass}
-      />
+      {errors.name && <ErrorCallout>{errors?.name?.message}</ErrorCallout>}
+
       <textarea
         cols={30}
         rows={100}
@@ -155,12 +205,17 @@ const PersonalInfo = ({ session, register }: FormProps) => {
         placeholder="Bio"
         {...register("bio")}
       />
+      {errors.bio && <ErrorCallout>{errors?.bio?.message}</ErrorCallout>}
+
       <input
         type="text"
         className={inputClass}
         placeholder="Location"
         {...register("location")}
       />
+      {errors.location && (
+        <ErrorCallout>{errors?.location?.message}</ErrorCallout>
+      )}
     </>
   );
 };
@@ -433,6 +488,106 @@ const WorkExperience = ({
                   onClick={() => {
                     appendWorkExperienceField(defaultValues?.workExperience!);
                     setWorkBlock(workBlock + 1);
+                  }}
+                >
+                  Add new one
+                </Button>
+              )}
+            </section>
+          </Card>
+        );
+      })}
+    </>
+  );
+};
+
+const Projects = ({
+  register,
+  errors,
+  control,
+  defaultValues,
+  projectBlock,
+  setProjectBlock,
+  setValue,
+}: FormProps & {
+  projectBlock: number;
+  setProjectBlock: React.Dispatch<React.SetStateAction<number>>;
+  setValue: UseFormSetValue<ProfileCreationFormType>;
+}) => {
+  const {
+    fields: projectFields,
+    append: appendProjectField,
+    remove: removeProjectField,
+  } = useFieldArray({
+    name: "projects",
+    control,
+  });
+
+  return (
+    <>
+      <Heading mb="5">Projects</Heading>
+      {projectFields.map((item, index) => {
+        return (
+          <Card mt="3" key={item.id}>
+            <section className="flex flex-col gap-2" key={item.id}>
+              <input
+                type="text"
+                placeholder="Title"
+                className={inputClass}
+                {...register(`projects.${index}.title`)}
+              />
+              {errors.projects && errors?.projects[index]?.title && (
+                <ErrorCallout>
+                  {errors?.projects[index]?.title?.message}
+                </ErrorCallout>
+              )}
+
+              <SelectMenu setValue={setValue} />
+              {errors.projects && errors?.projects[index]?.skills && (
+                <ErrorCallout>
+                  {errors?.projects[index]?.skills?.message}
+                </ErrorCallout>
+              )}
+
+              <textarea
+                rows={30}
+                cols={50}
+                placeholder="Description"
+                className={inputClass}
+                {...register(`projects.${index}.description`)}
+              />
+              {errors.projects && errors?.projects[index]?.description && (
+                <ErrorCallout>
+                  {errors?.projects[index]?.description?.message}
+                </ErrorCallout>
+              )}
+
+              {projectBlock > 1 && (
+                <Button
+                  type="button"
+                  variant="solid"
+                  color="red"
+                  my="3"
+                  className="w-28"
+                  onClick={() => {
+                    removeProjectField(index);
+                    setProjectBlock(projectBlock - 1);
+                  }}
+                >
+                  Delete
+                </Button>
+              )}
+
+              {projectBlock < 2 && (
+                <Button
+                  type="button"
+                  variant="solid"
+                  color="green"
+                  className="w-28"
+                  my="3"
+                  onClick={() => {
+                    appendProjectField(defaultValues?.projects!);
+                    setProjectBlock(projectBlock + 1);
                   }}
                 >
                   Add new one
