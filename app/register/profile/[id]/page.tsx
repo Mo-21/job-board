@@ -3,19 +3,21 @@ import { Box, Button, Heading, Text } from "@radix-ui/themes";
 import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import styles from "../styles/ProfileForm.module.css";
-import ProfileCompletionForm from "./profileCompletionForm";
+import styles from "@/app/styles/ProfileForm.module.css";
+import ProfileCompletionForm from "./_components/profileCompletionForm";
 
-export interface Props {
+interface Props {
   page: number;
   pageCount: number;
   setPage?: (page: number) => void;
   session?: Session | undefined | null;
 }
 
-const ProfileCompletion = () => {
+const ProfileCompletion = ({ params }: { params: { id: string } }) => {
   const [page, setPage] = useState(1);
   const pageCount = 5;
+
+  console.log(params.id);
 
   const { data: session } = useSession();
 
@@ -32,7 +34,7 @@ const ProfileCompletion = () => {
             👋
           </Heading>
           <ProfileCompletionForm
-            pageCount={pageCount}
+            params={params}
             page={page}
             session={session}
           />
