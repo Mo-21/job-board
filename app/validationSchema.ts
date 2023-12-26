@@ -72,6 +72,7 @@ export const profileCreationSchema = z.object({
         title: z.string().min(1, "Title is Required").max(255),
         company: z.string().min(1, "Company is Required").max(255),
         description: z.string().max(2000).optional().nullable(),
+        location: z.string().min(1, "Location is Required").max(255),
         startDate: z.string().min(1, "Start Date is Required").max(255),
         endDate: z.string().min(1, "End Date is Required").max(255),
       })

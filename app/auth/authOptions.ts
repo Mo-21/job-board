@@ -52,6 +52,7 @@ const authOptions: NextAuthOptions = {
           email: session.user?.email!,
         },
         select: {
+          id: true,
           email: true,
           name: true,
           image: true,

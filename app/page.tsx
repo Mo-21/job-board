@@ -24,7 +24,7 @@ export default function Home() {
               " ",
               1
             )}, please update your profile to start applying for jobs. You can update it from`}{" "}
-            <Link href="/profile">here</Link>
+            <Link href={`/register/profile/${session?.user?.id!}`}>here</Link>
           </ErrorCallout>
         </div>
       )}
