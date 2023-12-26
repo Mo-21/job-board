@@ -5,6 +5,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 10px;
+  margin-bottom: 30px;
 }
 
 .input_bar_container {
