@@ -1,3 +1,4 @@
+import { title } from "process";
 import { z } from "zod";
 
 export const registerSchema = z.object({
@@ -45,26 +46,37 @@ const linkSchema = z
   .nullable();
 
 export const profileCreationSchema = z.object({
-  bio: z.string().max(255).optional().nullable(),
-  location: z
+  name: z
     .string()
-    .min(1, "Location is Required")
+    .min(2, "Name is Required")
     .max(255)
-    .regex(/^[a-zA-Z]*$/, {
-      message: "Location must contain only English alphabets",
+    .regex(/^[a-zA-Z\s]*$/, {
+      message: "First Name must contain only English alphabets",
     }),
-  projects: z.array(z.string()).min(1, "Projects is Required").max(5),
+  bio: z.string().max(255).optional().nullable(),
+  location: z.string().min(1, "Location is Required").max(255),
   skills: z.array(z.string()).min(1, "Skills is Required").max(10),
+  projects: z
+    .array(
+      z.object({
+        title: z.string().min(1, "Title is Required").max(255),
+        description: z.string().max(2000),
+        skills: z.array(z.string()).min(1, "Skills is Required").max(10),
+      })
+    )
+    .min(1, "Projects is Required")
+    .max(3),
   workExperience: z
     .array(
       z.object({
         title: z.string().min(1, "Title is Required").max(255),
         company: z.string().min(1, "Company is Required").max(255),
-        description: z.string().max(255).optional().nullable(),
+        description: z.string().max(2000).optional().nullable(),
         startDate: z.string().min(1, "Start Date is Required").max(255),
         endDate: z.string().min(1, "End Date is Required").max(255),
       })
     )
+    .min(1, "Work is Required")
     .max(2, "Only 2 Work Experiences are Allowed"),
   education: z
     .array(
@@ -76,6 +88,7 @@ export const profileCreationSchema = z.object({
         endDate: z.string(),
       })
     )
+    .min(1, "Education is Required")
     .max(2, "Only 2 Education Experiences are Allowed"),
   links: z.object({
     linkedin: linkSchema,
