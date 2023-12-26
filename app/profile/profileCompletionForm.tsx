@@ -82,7 +82,7 @@ const ProfileCompletionForm = ({ page, session }: Props) => {
     projects: [
       {
         title: "",
-        description: "Very nice internship",
+        description: "Very cool project",
         skills: ["HTML", "CSS"],
       },
     ],
