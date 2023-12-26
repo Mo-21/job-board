@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import styles from "../styles/ProfileForm.module.css";
 import ProfileCompletionForm from "./profileCompletionForm";
-import Spinner from "../components/Spinner";
 
 export interface Props {
   page: number;
@@ -16,9 +15,7 @@ export interface Props {
 
 const ProfileCompletion = () => {
   const [page, setPage] = useState(1);
-  const pageCount = 4;
-
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const pageCount = 5;
 
   const { data: session } = useSession();
 
@@ -39,13 +36,7 @@ const ProfileCompletion = () => {
             page={page}
             session={session}
           />
-          <Action
-            page={page}
-            pageCount={pageCount}
-            setPage={setPage}
-            isSubmitted={isSubmitted}
-            setIsSubmitted={setIsSubmitted}
-          />
+          <Action page={page} pageCount={pageCount} setPage={setPage} />
         </Box>
       </Box>
     </Box>
@@ -66,16 +57,7 @@ const ProgressBar = ({ page, pageCount }: Props) => {
   );
 };
 
-const Action = ({
-  page,
-  pageCount,
-  setPage,
-  isSubmitted,
-  setIsSubmitted,
-}: Props & {
-  isSubmitted: boolean;
-  setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const Action = ({ page, pageCount, setPage }: Props) => {
   return (
     <>
       <Box className={styles.buttons}>
@@ -110,18 +92,6 @@ const Action = ({
             className={styles.next_button}
           >
             Next
-          </Button>
-        )}
-
-        {page === 4 && !isSubmitted && (
-          <Button
-            disabled={isSubmitted}
-            color="green"
-            className={styles.next_button}
-            onClick={() => setIsSubmitted(true)}
-          >
-            {isSubmitted && <Spinner />}
-            Submit
           </Button>
         )}
       </Box>
