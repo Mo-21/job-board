@@ -3,6 +3,7 @@ export const skillsArray: string[] = [
   "CSS",
   "JavaScript",
   "TypeScript",
+  "Next.js",
   "React",
   "Angular",
   "Vue.js",
