@@ -3,16 +3,22 @@ import { skillsArray } from "@/app/skills";
 import styles from "../styles/SelectMenu.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowDownIcon } from "@radix-ui/react-icons";
+import { UseFormSetValue } from "react-hook-form";
+import { ProfileCreationFormType } from "../validationSchema";
 
-const SelectMenu = () => {
-  const [skills, setSkills] = useState<string[]>([]);
+interface SelectMenuProps {
+  setValue: UseFormSetValue<ProfileCreationFormType>;
+}
+
+const SelectMenu = ({ setValue }: SelectMenuProps) => {
+  const [skills, setSkills] = useState<string[]>(skillsArray);
   const [query, setQuery] = useState<string>("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    setSkills(skillsArray);
-  }, []);
+    setValue("skills", selectedSkills);
+  }, [setValue, selectedSkills]);
 
   const filteredSkills = useMemo(() => {
     if (!query) return skills;
@@ -32,7 +38,7 @@ const SelectMenu = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container}`}>
       {selectedSkills.length > 0 && <SelectedSkillsMenu props={props} />}
       <div className={styles.input_bar_container}>
         <SelectInput props={props} />
@@ -74,7 +80,6 @@ const SelectInput = ({ props }: Props) => {
         type="text"
         placeholder="Select skills"
         value={props.query}
-        required
       />
       <span
         onClick={() => {
