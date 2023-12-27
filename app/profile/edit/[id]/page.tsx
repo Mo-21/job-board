@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import styles from "@/app/styles/ProfileForm.module.css";
 import ProfileCompletionForm from "./_components/profileCompletionForm";
-import { notFound } from "next/navigation";
 
 interface Props {
   page: number;
