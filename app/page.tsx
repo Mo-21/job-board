@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import ErrorCallout from "./components/ErrorCallout";
 import { Link } from "@radix-ui/themes";
+import { Watch } from "react-loader-spinner";
 
 export default function Home() {
   const { status, data: session } = useSession();
@@ -13,7 +14,21 @@ export default function Home() {
       setCallout(true);
   }, [session]);
 
-  if (status === "unauthenticated") return null;
+  if (status === "unauthenticated") {
+    return null;
+  } else if (status === "loading") {
+    return (
+      <div className="flex justify-center mt-8">
+        <Watch
+          color="#0090FF"
+          width="100"
+          height="100"
+          radius="48"
+          ariaLabel="watch-loading"
+        />
+      </div>
+    );
+  }
 
   return (
     <>

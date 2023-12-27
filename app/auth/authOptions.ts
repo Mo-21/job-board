@@ -61,7 +61,9 @@ const authOptions: NextAuthOptions = {
       });
 
       if (fullUser) {
-        session.user = fullUser;
+        session.user = {
+          ...fullUser,
+        };
       }
 
       return session;
