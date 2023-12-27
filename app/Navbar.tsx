@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { BsPersonCheckFill } from "react-icons/bs";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import UserImage from "./components/UserImage";
 
 const Navbar = () => {
   return (
@@ -71,30 +72,23 @@ const UserAvatar = () => {
       {session && status === "authenticated" ? (
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            {session.user?.image?.startsWith("https") ? (
-              <Avatar
-                src={session?.user?.image!}
-                fallback="?"
-                variant="soft"
-                radius="full"
-                size="4"
-                alt="user-image"
-                className="cursor-pointer"
+            <div>
+              <UserImage
+                props={{
+                  image: session.user?.image,
+                  size: "4",
+                  width: 48,
+                  height: 48,
+                }}
               />
-            ) : (
-              <CldImage
-                width={48}
-                height={48}
-                crop="fill"
-                className="rounded-full cursor-pointer"
-                src={session.user?.image!}
-                alt="user-image"
-              />
-            )}
+            </div>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
             <DropdownMenu.Label>{session.user?.email}</DropdownMenu.Label>
             <DropdownMenu.Label>{session.user?.name}</DropdownMenu.Label>
+            <DropdownMenu.Item>
+              <Link href={`/profile/${session?.user?.id}`}>Profile</Link>
+            </DropdownMenu.Item>
             <DropdownMenu.Item>
               <Link href="/api/auth/signout">Logout</Link>
             </DropdownMenu.Item>
