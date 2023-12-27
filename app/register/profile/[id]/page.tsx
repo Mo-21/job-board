@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import styles from "@/app/styles/ProfileForm.module.css";
 import ProfileCompletionForm from "./_components/profileCompletionForm";
+import { notFound } from "next/navigation";
 
 interface Props {
   page: number;
@@ -17,9 +18,9 @@ const ProfileCompletion = ({ params }: { params: { id: string } }) => {
   const [page, setPage] = useState(1);
   const pageCount = 5;
 
-  console.log(params.id);
-
   const { data: session } = useSession();
+
+  if (!session || params.id !== session?.user?.id) return "Not Authorized";
 
   return (
     <Box className={styles.profile_container}>
