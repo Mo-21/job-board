@@ -9,10 +9,9 @@ import {
   Heading,
   Table,
   Text,
-  Separator,
-  Box,
+  Button,
 } from "@radix-ui/themes";
-import { userAgent } from "next/server";
+import Link from "next/link";
 import React from "react";
 
 const ProfilePage = async ({ params }: { params: { id: string } }) => {
@@ -63,16 +62,20 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
           md: "5",
         }}
       >
-        <UserImage
-          props={{
-            image: user.image,
-            size: "9",
-            width: 100,
-            height: 100,
-            avatarClass: "col-span-1",
-            cloudClass: "col-span-1",
-          }}
-        />
+        <Flex direction="column" align="center" gap="5" className="col-span-1">
+          <UserImage
+            props={{
+              image: user.image,
+              size: "9",
+              width: 100,
+              height: 100,
+            }}
+          />
+          <Text>{user.bio}</Text>
+          <Button variant="solid">
+            <Link href={`/profile/edit/${user.id}`}>Edit Profile</Link>
+          </Button>
+        </Flex>
         <Flex direction="column" gap="7" className="col-span-4">
           {tables.map((table) => (
             <Flex direction="column" gap="3" key={table.label}>
@@ -87,39 +90,26 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
 };
 
 const PersonalInfo = ({ user }: { user: User }) => {
-  const columns = [
-    { label: "Name", value: user.name },
-    {
-      label: "Email",
-      value: user.email,
-    },
-    {
-      label: "Bio",
-      value: user.bio,
-    },
-    {
-      label: "Location",
-      value: user.location,
-    },
-  ];
   return (
     <Table.Root className="col-span-3" color="green">
       <Table.Header>
         <Table.Row>
-          {columns.map((col) => (
-            <Table.ColumnHeaderCell key={col.label}>
-              {col.label}
-            </Table.ColumnHeaderCell>
-          ))}
+          <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>Location</Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
         <Table.Row>
-          {columns.map((col) => (
-            <Table.Cell key={col.label}>
-              <Text>{col.value}</Text>
-            </Table.Cell>
-          ))}
+          <Table.Cell>
+            <Text>{user.name}</Text>
+          </Table.Cell>
+          <Table.Cell>
+            <Text>{user.email}</Text>
+          </Table.Cell>
+          <Table.Cell>
+            <Text>{user.location}</Text>
+          </Table.Cell>
         </Table.Row>
       </Table.Body>
     </Table.Root>
