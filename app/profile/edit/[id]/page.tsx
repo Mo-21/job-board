@@ -1,12 +1,14 @@
 "use client";
-import { Box, Button, Heading, Text } from "@radix-ui/themes";
+import styles from "@/app/styles/ProfileForm.module.css";
+import { Box, Heading } from "@radix-ui/themes";
 import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import styles from "@/app/styles/ProfileForm.module.css";
+import Action from "./_components/ActionToolbar";
+import ProgressBar from "./_components/ProgressBar";
 import ProfileCompletionForm from "./_components/profileCompletionForm";
 
-interface Props {
+export interface Props {
   page: number;
   pageCount: number;
   setPage?: (page: number) => void;
@@ -30,7 +32,7 @@ const ProfileCompletion = ({ params }: { params: { id: string } }) => {
             Welcome
             {session?.user?.name
               ? ` ${session?.user?.name?.split(" ", 1)}!`
-              : ""}{" "}
+              : ""}
             👋
           </Heading>
           <ProfileCompletionForm
@@ -42,62 +44,6 @@ const ProfileCompletion = ({ params }: { params: { id: string } }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
-
-const ProgressBar = ({ page, pageCount }: Props) => {
-  return (
-    <Box className={styles.progress_bar}>
-      <Box
-        className={styles.progress}
-        style={{
-          width: `${(page / pageCount) * 100}%`,
-          borderRadius: page === pageCount ? "5px" : "5px 0 0 5px",
-        }}
-      />
-    </Box>
-  );
-};
-
-const Action = ({ page, pageCount, setPage }: Props) => {
-  return (
-    <>
-      <Box className={styles.buttons}>
-        {page <= pageCount && page > 1 && (
-          <Button
-            onClick={(event) => {
-              event.preventDefault();
-              setPage!(page - 1);
-            }}
-            variant="solid"
-            color="blue"
-            className={styles.previous_button}
-          >
-            Previous
-          </Button>
-        )}
-
-        <Box className={styles.page_counter}>
-          <Text className={styles.pages}>
-            {page} of {pageCount}
-          </Text>
-        </Box>
-
-        {page < pageCount && (
-          <Button
-            onClick={(event) => {
-              event.preventDefault();
-              setPage!(page + 1);
-            }}
-            variant="solid"
-            color="blue"
-            className={styles.next_button}
-          >
-            Next
-          </Button>
-        )}
-      </Box>
-    </>
   );
 };
 
