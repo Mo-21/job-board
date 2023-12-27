@@ -72,11 +72,11 @@ const Education = ({
                 </label>
                 <input
                   type="date"
-                  name="start_date"
                   placeholder="Start Date"
                   className={inputClass}
-                  {...(register(`education.${index}.startDate`),
-                  { required: true })}
+                  {...register(`education.${index}.startDate`, {
+                    required: true,
+                  })}
                 />
                 {errors.education && errors?.education[index]?.startDate && (
                   <ErrorCallout>
@@ -89,11 +89,11 @@ const Education = ({
                 </label>
                 <input
                   type="date"
-                  name="end_date"
                   placeholder="End Date"
                   className={inputClass}
-                  {...(register(`education.${index}.endDate`),
-                  { required: true })}
+                  {...register(`education.${index}.endDate`, {
+                    required: true,
+                  })}
                 />
               </div>
               {errors.education && errors?.education[index]?.endDate && (

@@ -25,6 +25,8 @@ import Links from "./Links&Skills";
 import PersonalInfo from "./PersonalInfo";
 import Projects from "./ProjectsForm";
 import WorkExperience from "./WorkExperienceForm";
+import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface Props {
   page: number;
@@ -44,8 +46,8 @@ const ProfileCompletionForm = ({ page, session, params }: Props) => {
         school: "Oxford",
         degree: "Diploma",
         location: "London",
-        startDate: Date.now().toLocaleString(),
-        endDate: Date.now().toLocaleString(),
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
       },
     ],
     workExperience: [
@@ -54,8 +56,8 @@ const ProfileCompletionForm = ({ page, session, params }: Props) => {
         company: "X",
         description: "Very nice internship",
         location: "Chicago",
-        startDate: Date.now().toLocaleString(),
-        endDate: Date.now().toLocaleString(),
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
       },
     ],
     projects: [
@@ -151,10 +153,40 @@ const ProfileCompletionForm = ({ page, session, params }: Props) => {
     },
   ];
 
+  const router = useRouter();
+
   const onSubmit: SubmitHandler<ProfileCreationFormType> = async (data, e) => {
     e?.preventDefault();
-    console.log(data);
-    const response = await axios;
+
+    for (let i = 0; i < data.workExperience.length; i++) {
+      const formattedWorkDated = {
+        startDate: new Date(data.workExperience[i]?.startDate).toISOString(),
+        endDate: new Date(data.workExperience[i]?.endDate).toISOString(),
+      };
+      data.workExperience[i].startDate = formattedWorkDated.startDate;
+      data.workExperience[i].endDate = formattedWorkDated.endDate;
+    }
+    for (let i = 0; i < data.education.length; i++) {
+      const formattedEduDated = {
+        startDate: new Date(data.education[i]?.startDate).toISOString(),
+        endDate: new Date(data.education[i]?.endDate).toISOString(),
+      };
+      data.education[i].startDate = formattedEduDated.startDate;
+      data.education[i].endDate = formattedEduDated.endDate;
+    }
+
+    await axios
+      .patch(`/api/register/profile/${params.id}`, data)
+      .catch((err) => {
+        console.log(err);
+        toast.error(
+          "Something went wrong, please check your entries one more time"
+        );
+      })
+      .finally(() => {
+        setIsSubmitted(false);
+        router.push(`/profile/${params.id}`);
+      });
   };
 
   return (
@@ -164,6 +196,7 @@ const ProfileCompletionForm = ({ page, session, params }: Props) => {
         [styles.active]: page === page,
       })}
     >
+      <Toaster />
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form_group}>
         <Box className={styles.input_container}>{pages[page - 1].value}</Box>
 
@@ -171,6 +204,7 @@ const ProfileCompletionForm = ({ page, session, params }: Props) => {
           <Button
             type="submit"
             color="green"
+            disabled={isSubmitted}
             className={styles.next_button}
             onClick={() => setIsSubmitted(true)}
           >

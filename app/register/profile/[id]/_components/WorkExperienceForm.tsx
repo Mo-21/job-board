@@ -76,11 +76,11 @@ const WorkExperience = ({
                 </label>
                 <input
                   type="date"
-                  name="start_date"
                   placeholder="Start Date"
                   className={inputClass}
-                  {...(register(`workExperience.${index}.startDate`),
-                  { required: true })}
+                  {...register(`workExperience.${index}.startDate`, {
+                    required: true,
+                  })}
                 />
                 {errors.workExperience &&
                   errors?.workExperience[index]?.startDate && (
@@ -94,11 +94,11 @@ const WorkExperience = ({
                 </label>
                 <input
                   type="date"
-                  name="end_date"
                   placeholder="End Date"
                   className={inputClass}
-                  {...(register(`workExperience.${index}.endDate`),
-                  { required: true })}
+                  {...register(`workExperience.${index}.endDate`, {
+                    required: true,
+                  })}
                 />
                 {errors.workExperience &&
                   errors?.workExperience[index]?.endDate && (
