@@ -1,11 +1,11 @@
 import { prisma } from "@/prisma/client";
 import { Badge, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import React from "react";
-import LevelBadge from "../components/LevelBadge";
-import DateFormatted from "../components/DateFormatted";
 import Link from "next/link";
 import { Job } from "@prisma/client";
 import delay from "delay";
+import DateFormatted from "@/app/components/DateFormatted";
+import LevelBadge from "@/app/components/LevelBadge";
 
 const page = async () => {
   const jobs = await prisma.job.findMany();

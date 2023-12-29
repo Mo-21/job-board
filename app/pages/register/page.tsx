@@ -12,12 +12,12 @@ import {
   RegistrationFormType,
   registerSchema,
   validatePasswords,
-} from "../validationSchema";
+} from "../../validationSchema";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import Spinner from "../components/Spinner";
-import ErrorCallout from "../components/ErrorCallout";
+import Spinner from "../../components/Spinner";
+import ErrorCallout from "../../components/ErrorCallout";
 import { useState } from "react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import defaultImage from "@/public/default.png";

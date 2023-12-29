@@ -7,6 +7,7 @@ import { useState } from "react";
 import Action from "./_components/ActionToolbar";
 import ProgressBar from "./_components/ProgressBar";
 import ProfileCompletionForm from "./_components/profileCompletionForm";
+import { MagnifyingGlass } from "react-loader-spinner";
 
 export interface Props {
   page: number;
@@ -19,9 +20,23 @@ const ProfileCompletion = ({ params }: { params: { id: string } }) => {
   const [page, setPage] = useState(1);
   const pageCount = 6;
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  if (!session || params.id !== session.user.id) return "Not Authorized";
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center mt-10">
+        <MagnifyingGlass
+          visible={true}
+          height="150"
+          width="150"
+          glassColor="#c0efff"
+          color="#e15b64"
+        />
+      </div>
+    );
+  } else if (params.id !== session?.user.id) {
+    return "Not Authorized";
+  }
 
   return (
     <Box className={styles.profile_container}>
