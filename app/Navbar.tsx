@@ -1,8 +1,7 @@
 "use client";
-import { Avatar, Button, DropdownMenu, Flex } from "@radix-ui/themes";
+import { DropdownMenu, Flex } from "@radix-ui/themes";
 import classNames from "classnames";
 import { useSession } from "next-auth/react";
-import { CldImage } from "next-cloudinary";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BsPersonCheckFill } from "react-icons/bs";
@@ -95,7 +94,7 @@ const UserAvatar = () => {
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       ) : (
-        <Link href="/api/auth/signin">Login</Link>
+        <Link href="/auth/signin">Login</Link>
       )}
     </>
   );
