@@ -17,11 +17,11 @@ export interface Props {
 
 const ProfileCompletion = ({ params }: { params: { id: string } }) => {
   const [page, setPage] = useState(1);
-  const pageCount = 5;
+  const pageCount = 6;
 
   const { data: session } = useSession();
 
-  if (!session || params.id !== session?.user?.id) return "Not Authorized";
+  if (!session || params.id !== session.user.id) return "Not Authorized";
 
   return (
     <Box className={styles.profile_container}>

@@ -46,6 +46,9 @@ const linkSchema = z
   .nullable();
 
 export const profileCreationSchema = z.object({
+  role: z.enum(["RECRUITER", "JOB_SEEKER"], {
+    required_error: "Role is required",
+  }),
   name: z
     .string()
     .min(2, "Name is Required")
@@ -99,13 +102,9 @@ export const profileCreationSchema = z.object({
 });
 
 export const validatePasswords = (data: RegistrationFormType) => {
-  try {
-    registerSchema.parse(data);
-    if (data.password !== data.passwordConfirmation) return false;
-    return true;
-  } catch (error) {
-    console.log(error);
-  }
+  registerSchema.parse(data);
+  if (data.password !== data.passwordConfirmation) return false;
+  return true;
 };
 
 export type RegistrationFormType = z.infer<typeof registerSchema>;

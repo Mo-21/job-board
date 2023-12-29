@@ -7,6 +7,9 @@ import bcrypt from "bcrypt";
 
 const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
+  pages: {
+    signIn: "/auth/signin",
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -43,28 +46,30 @@ const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: `${profile.given_name} ${profile.last_name}`,
+          email: profile.email,
+          image: profile.picture,
+          role: profile.role ? profile.role : "JOB_SEEKER",
+        };
+      },
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
-      const fullUser = await prisma.user.findUnique({
-        where: {
-          email: session.user?.email!,
-        },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          image: true,
-          accountComplete: true,
-        },
-      });
-
-      if (fullUser) {
-        session.user = {
-          ...fullUser,
-        };
-      }
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
+    async session({ session, token }) {
+      session.user = {
+        name: token.name,
+        email: token.email,
+        image: token.image,
+        role: token.role,
+        id: token.id,
+        accountComplete: token.accountComplete,
+      };
 
       return session;
     },

@@ -4,7 +4,7 @@ import { Box, Button, Card, Heading } from "@radix-ui/themes";
 import axios from "axios";
 import classNames from "classnames";
 import { Session } from "next-auth";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   Control,
   FieldErrors,
@@ -27,6 +27,7 @@ import Projects from "./ProjectsForm";
 import WorkExperience from "./WorkExperienceForm";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import RoleSelect from "./RoleSelect";
 
 interface Props {
   page: number;
@@ -39,6 +40,11 @@ const ProfileCompletionForm = ({ page, session, params }: Props) => {
   const [educationBlock, setEducationBlock] = useState(1);
   const [projectBlock, setProjectBlock] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [currentPage, setCurrentPage] = useState<number>();
+
+  useEffect(() => {
+    setCurrentPage(page);
+  }, [page]);
 
   const defaultValues = {
     education: [
@@ -82,6 +88,17 @@ const ProfileCompletionForm = ({ page, session, params }: Props) => {
   });
 
   const pages: { label: string; value: ReactNode }[] = [
+    {
+      label: "role_selection",
+      value: (
+        <RoleSelect
+          key="role_selection"
+          register={register}
+          setValue={setValue}
+          errors={errors}
+        />
+      ),
+    },
     {
       label: "personal_info",
       value: (
@@ -175,42 +192,60 @@ const ProfileCompletionForm = ({ page, session, params }: Props) => {
       data.education[i].endDate = formattedEduDated.endDate;
     }
 
-    await axios
-      .patch(`/api/register/profile/${params.id}`, data)
-      .catch((err) => {
-        console.log(err);
-        toast.error(
-          "Something went wrong, please check your entries one more time"
-        );
-      })
-      .finally(() => {
-        setIsSubmitted(false);
-        router.push(`/profile/${params.id}`);
-      });
+    // await axios
+    //   .patch(`/api/register/profile/${params.id}`, data)
+    //   .catch((err) => {
+    //     console.log(err);
+    //     toast.error(
+    //       "Something went wrong, please check your entries one more time"
+    //     );
+    //   })
+    //   .finally(() => {
+    //     setIsSubmitted(false);
+    //     router.push(`/profile/${params.id}`);
+    //   });
+    console.log(data);
   };
+
+  const hasErrors =
+    Object.keys(errors).filter((key) => key !== "skills").length > 0;
+
+  const keysWithErrors = Object.keys(errors).filter(
+    (key) =>
+      errors[key] !== undefined && errors[key] !== null && key !== "skills"
+  );
 
   return (
     <Card
       className={classNames({
         [styles.page_container]: true,
-        [styles.active]: page === page,
+        [styles.active]: page === currentPage,
       })}
     >
       <Toaster />
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form_group}>
         <Box className={styles.input_container}>{pages[page - 1].value}</Box>
 
-        {page === 5 && (
-          <Button
-            type="submit"
-            color="green"
-            disabled={isSubmitted}
-            className={styles.next_button}
-            onClick={() => setIsSubmitted(true)}
-          >
-            {isSubmitted && <Spinner />}
-            Submit
-          </Button>
+        {currentPage === 6 && (
+          <>
+            {hasErrors
+              ? keysWithErrors.map((key) => (
+                  <ErrorCallout
+                    key={key}
+                  >{`You have errors in ${key}`}</ErrorCallout>
+                ))
+              : ""}
+            <Button
+              type="submit"
+              color="green"
+              // disabled={isSubmitted}
+              className={styles.next_button}
+              onClick={() => setIsSubmitted(true)}
+            >
+              {isSubmitted && <Spinner />}
+              Submit
+            </Button>
+          </>
         )}
       </form>
     </Card>
