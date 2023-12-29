@@ -8,6 +8,7 @@ import Action from "./_components/ActionToolbar";
 import ProgressBar from "./_components/ProgressBar";
 import ProfileCompletionForm from "./_components/profileCompletionForm";
 import { MagnifyingGlass } from "react-loader-spinner";
+import { notFound, useSearchParams } from "next/navigation";
 
 export interface Props {
   page: number;
@@ -18,9 +19,11 @@ export interface Props {
 
 const ProfileCompletion = ({ params }: { params: { id: string } }) => {
   const [page, setPage] = useState(1);
-  const pageCount = 6;
-
   const { data: session, status } = useSession();
+  const queryParams = useSearchParams();
+
+  const pageCount = parseInt(queryParams.get("pageCount")!);
+  if (pageCount !== 6 && pageCount !== 2) return notFound();
 
   if (status === "loading") {
     return (
