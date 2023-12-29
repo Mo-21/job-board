@@ -73,6 +73,19 @@ const authOptions: NextAuthOptions = {
 
       return session;
     },
+    async signIn({ user }) {
+      const currentUser = await prisma.user.findUnique({
+        where: {
+          id: user.id,
+        },
+      });
+
+      if (currentUser) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   session: {
     strategy: "jwt",

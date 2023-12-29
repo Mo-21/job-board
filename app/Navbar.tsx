@@ -1,7 +1,7 @@
 "use client";
-import { DropdownMenu, Flex } from "@radix-ui/themes";
+import { Button, DropdownMenu, Flex } from "@radix-ui/themes";
 import classNames from "classnames";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BsPersonCheckFill } from "react-icons/bs";
@@ -88,8 +88,11 @@ const UserAvatar = () => {
             <DropdownMenu.Item>
               <Link href={`/profile/${session?.user?.id}`}>Profile</Link>
             </DropdownMenu.Item>
-            <DropdownMenu.Item>
-              <Link href="/api/auth/signout">Logout</Link>
+            <DropdownMenu.Item
+              onClick={() => signOut({ redirect: true, callbackUrl: "/" })}
+              style={{ cursor: "pointer" }}
+            >
+              Logout
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
