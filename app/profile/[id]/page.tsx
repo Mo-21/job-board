@@ -73,16 +73,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
           />
           <Text>{user.bio}</Text>
           <Button variant="solid">
-            <Link
-              href={{
-                pathname: `/profile/edit/${user.id}`,
-                query: {
-                  pageCount: user.role === "JOB_SEEKER" ? 6 : 2,
-                },
-              }}
-            >
-              Edit Profile
-            </Link>
+            <Link href={`/profile/edit/${user.id}`}>Edit Profile</Link>
           </Button>
         </Flex>
         <Flex direction="column" gap="7" className="col-span-4">
