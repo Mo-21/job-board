@@ -63,7 +63,7 @@ const RecruiterForm = ({ page, params }: Props) => {
       })
       .finally(() => {
         setIsSubmitted(false);
-        // router.push(`/profile/${params.id}`);
+        router.push(`/profile/${params.id}`);
       });
 
     console.log(res);
