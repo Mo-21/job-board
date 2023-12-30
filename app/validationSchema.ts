@@ -1,4 +1,3 @@
-import { title } from "process";
 import { z } from "zod";
 
 export const registerSchema = z.object({
@@ -37,6 +36,12 @@ export const registerSchema = z.object({
     }),
   passwordConfirmation: z.string().min(1, "Password Confirmation is Required"),
   image: z.string().optional().nullable(),
+});
+
+export const roleSelection = z.object({
+  role: z.enum(["RECRUITER", "JOB_SEEKER"], {
+    required_error: "Role Is Required",
+  }),
 });
 
 const linkSchema = z
@@ -126,6 +131,4 @@ export type RegistrationFormType = z.infer<typeof registerSchema>;
 export type UserProfileCreationFormType = z.infer<
   typeof userProfileCreationSchema
 >;
-export type RecruiterProfileCreationFormType = z.infer<
-  typeof recruiterProfileCreationSchema
->;
+type UserProfileCreationType = z.infer<typeof roleSelection>;
