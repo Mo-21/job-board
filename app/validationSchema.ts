@@ -45,10 +45,7 @@ const linkSchema = z
   .optional()
   .nullable();
 
-export const profileCreationSchema = z.object({
-  role: z.enum(["RECRUITER", "JOB_SEEKER"], {
-    required_error: "Role is required",
-  }),
+export const userProfileCreationSchema = z.object({
   name: z
     .string()
     .min(2, "Name is Required")
@@ -101,6 +98,24 @@ export const profileCreationSchema = z.object({
   }),
 });
 
+export const recruiterProfileCreationSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Name is Required")
+    .max(255)
+    .regex(/^[a-zA-Z\s]*$/, {
+      message: "First Name must contain only English alphabets",
+    }),
+  bio: z.string().max(255).optional().nullable(),
+  location: z.string().min(1, "Location is Required").max(255),
+  company: z.string().min(1, "Company is Required").max(255),
+  links: z.object({
+    linkedin: linkSchema,
+    github: linkSchema,
+    portfolio: linkSchema,
+  }),
+});
+
 export const validatePasswords = (data: RegistrationFormType) => {
   registerSchema.parse(data);
   if (data.password !== data.passwordConfirmation) return false;
@@ -108,4 +123,9 @@ export const validatePasswords = (data: RegistrationFormType) => {
 };
 
 export type RegistrationFormType = z.infer<typeof registerSchema>;
-export type ProfileCreationFormType = z.infer<typeof profileCreationSchema>;
+export type UserProfileCreationFormType = z.infer<
+  typeof userProfileCreationSchema
+>;
+export type RecruiterProfileCreationFormType = z.infer<
+  typeof recruiterProfileCreationSchema
+>;
