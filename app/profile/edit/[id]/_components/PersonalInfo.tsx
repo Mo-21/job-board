@@ -1,8 +1,9 @@
 import ErrorCallout from "@/app/components/ErrorCallout";
 import { Heading } from "@radix-ui/themes";
-import { FormProps, inputClass } from "./profileCompletionForm";
+import {  inputClass } from "./ProfileCompletionForm";
+import { RecruiterChildrenType } from "./RecruiterForm";
 
-const PersonalInfo = ({ session, register, errors }: FormProps) => {
+const PersonalInfo = ({ register, errors }: RecruiterChildrenType) => {
   return (
     <>
       <Heading mb="5">Personal Information</Heading>
@@ -10,7 +11,6 @@ const PersonalInfo = ({ session, register, errors }: FormProps) => {
         type="text"
         placeholder="Name"
         className={inputClass}
-        defaultValue={session?.user?.name!}
         {...register("name")}
       />
       {errors.name && <ErrorCallout>{errors?.name?.message}</ErrorCallout>}
@@ -32,6 +32,16 @@ const PersonalInfo = ({ session, register, errors }: FormProps) => {
       />
       {errors.location && (
         <ErrorCallout>{errors?.location?.message}</ErrorCallout>
+      )}
+
+      <input
+        type="text"
+        placeholder="Company"
+        className={inputClass}
+        {...register("company")}
+      />
+      {errors.company && (
+        <ErrorCallout>{errors?.company?.message}</ErrorCallout>
       )}
     </>
   );

@@ -1,16 +1,19 @@
 "use client";
-import React, { SyntheticEvent, useState } from "react";
-import { FormProps } from "./profileCompletionForm";
-import { Box, Flex, Heading, RadioGroup, Text } from "@radix-ui/themes";
-import { UseFormSetValue } from "react-hook-form";
-import { ProfileCreationFormType } from "@/app/validationSchema";
 import ErrorCallout from "@/app/components/ErrorCallout";
+import { Flex, Heading, RadioGroup, Text } from "@radix-ui/themes";
+import { UseFormSetValue, FieldErrors } from "react-hook-form";
+import { Role } from "./ProfileCompletionForm";
 
-const RoleSelect = ({
-  errors,
-  register,
-  setValue,
-}: FormProps & { setValue: UseFormSetValue<ProfileCreationFormType> }) => {
+interface RoleProps {
+  setRoleValue: UseFormSetValue<{
+    role: Role;
+  }>;
+  roleErrors: FieldErrors<{
+    role: Role;
+  }>;
+}
+
+const RoleSelect = ({ roleErrors, setRoleValue }: RoleProps) => {
   const roles: {
     label: string;
     emoji: string;
@@ -23,13 +26,12 @@ const RoleSelect = ({
   return (
     <RadioGroup.Root
       onValueChange={(value: "RECRUITER" | "JOB_SEEKER") => {
-        console.log(value);
-        setValue("role", value);
+        setRoleValue("role", value);
       }}
     >
       <Heading mb="5">I am a ...</Heading>
-      {errors.role && errors?.role && (
-        <ErrorCallout>{errors?.role.message}</ErrorCallout>
+      {roleErrors.role && roleErrors?.role && (
+        <ErrorCallout>{roleErrors?.role.message}</ErrorCallout>
       )}
       <Flex gap="2" direction="column">
         {roles.map((role) => (

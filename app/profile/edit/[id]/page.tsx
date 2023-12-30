@@ -1,14 +1,16 @@
 "use client";
 import styles from "@/app/styles/ProfileForm.module.css";
+import { roleSelection } from "@/app/validationSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Heading } from "@radix-ui/themes";
 import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
-import Action from "./_components/ActionToolbar";
-import ProgressBar from "./_components/ProgressBar";
-import ProfileCompletionForm from "./_components/profileCompletionForm";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { MagnifyingGlass } from "react-loader-spinner";
-import { notFound, useSearchParams } from "next/navigation";
+import Action from "./_components/ActionToolbar";
+import ProfileCompletionForm from "./_components/ProfileCompletionForm";
+import ProgressBar from "./_components/ProgressBar";
 
 export interface Props {
   page: number;
@@ -19,11 +21,23 @@ export interface Props {
 
 const ProfileCompletion = ({ params }: { params: { id: string } }) => {
   const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState<number>();
   const { data: session, status } = useSession();
-  const queryParams = useSearchParams();
 
-  const pageCount = parseInt(queryParams.get("pageCount")!);
-  if (pageCount !== 6 && pageCount !== 2) return notFound();
+  const {
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<{ role: "RECRUITER" | "JOB_SEEKER" }>({
+    resolver: zodResolver(roleSelection),
+    mode: "onChange",
+  });
+
+  const value = watch("role");
+
+  useEffect(() => {
+    setPageCount(value === "JOB_SEEKER" ? 7 : value === "RECRUITER" ? 3 : 1);
+  }, [value]);
 
   if (status === "loading") {
     return (
@@ -45,8 +59,8 @@ const ProfileCompletion = ({ params }: { params: { id: string } }) => {
     <Box className={styles.profile_container}>
       <Box className={styles.components_wrapper}>
         <Box className={styles.wrapper}>
-          <ProgressBar page={page} pageCount={pageCount} />
-          <Heading size="8" mb="4" hidden={page > 1}>
+          <ProgressBar page={page} pageCount={pageCount!} />
+          <Heading size="8" mb="4">
             Welcome
             {session?.user?.name
               ? ` ${session?.user?.name?.split(" ", 1)}!`
@@ -54,11 +68,12 @@ const ProfileCompletion = ({ params }: { params: { id: string } }) => {
             👋
           </Heading>
           <ProfileCompletionForm
-            params={params}
             page={page}
-            session={session}
+            value={value}
+            setRoleValue={setValue}
+            roleErrors={errors}
           />
-          <Action page={page} pageCount={pageCount} setPage={setPage} />
+          <Action page={page} pageCount={pageCount!} setPage={setPage} />
         </Box>
       </Box>
     </Box>
