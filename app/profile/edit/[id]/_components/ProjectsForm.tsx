@@ -3,7 +3,7 @@ import SelectMenu from "@/app/components/SkillsSelect";
 import { ProfileCreationFormType } from "@/app/validationSchema";
 import { Heading, Card, Button } from "@radix-ui/themes";
 import { UseFormSetValue, useFieldArray } from "react-hook-form";
-import { FormProps, inputClass } from "./profileCompletionForm";
+import { FormProps, inputClass } from "./ProfileCompletionForm";
 
 const Projects = ({
   register,

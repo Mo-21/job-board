@@ -1,7 +1,7 @@
 import ErrorCallout from "@/app/components/ErrorCallout";
 import { Heading, Card, Button } from "@radix-ui/themes";
 import { useFieldArray } from "react-hook-form";
-import { FormProps, inputClass } from "./profileCompletionForm";
+import { FormProps, inputClass } from "./ProfileCompletionForm";
 
 const WorkExperience = ({
   register,

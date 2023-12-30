@@ -1,8 +1,9 @@
 import ErrorCallout from "@/app/components/ErrorCallout";
 import { Flex, Heading } from "@radix-ui/themes";
-import { inputClass, FormProps } from "./profileCompletionForm";
+import { inputClass } from "./ProfileCompletionForm";
+import { RecruiterChildrenType } from "./RecruiterForm";
 
-const Links = ({ register, errors }: FormProps) => {
+const Links = ({ register, errors }: RecruiterChildrenType) => {
   return (
     <Flex direction="column">
       <Heading mb="5">Links</Heading>

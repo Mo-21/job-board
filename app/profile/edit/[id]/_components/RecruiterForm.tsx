@@ -12,10 +12,18 @@ import {
 import { z } from "zod";
 import Links from "./Links";
 import PersonalInfo from "./PersonalInfo";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 export type RecruiterType = z.infer<typeof recruiterProfileCreationSchema>;
 
-const RecruiterForm = ({ page }: { page: number }) => {
+interface Props {
+  page: number;
+  params: { id: string };
+}
+
+const RecruiterForm = ({ page, params }: Props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const {
@@ -26,6 +34,8 @@ const RecruiterForm = ({ page }: { page: number }) => {
     resolver: zodResolver(recruiterProfileCreationSchema),
     mode: "onChange",
   });
+
+  const router = useRouter();
 
   const pages = [
     {
@@ -38,9 +48,25 @@ const RecruiterForm = ({ page }: { page: number }) => {
     },
   ];
 
-  const onSubmit: SubmitHandler<RecruiterType> = (data, e) => {
+  console.log(errors);
+
+  const onSubmit: SubmitHandler<RecruiterType> = async (data, e) => {
     e?.preventDefault();
     console.log(data);
+    const res = await axios
+      .patch(`/api/register/profile/recruiters/${params.id}`, data)
+      .catch((err) => {
+        console.log(err);
+        toast.error(
+          "Something went wrong, please check your entries one more time"
+        );
+      })
+      .finally(() => {
+        setIsSubmitted(false);
+        // router.push(`/profile/${params.id}`);
+      });
+
+    console.log(res);
   };
 
   return (
@@ -61,6 +87,7 @@ const RecruiterForm = ({ page }: { page: number }) => {
           </Button>
         )}
       </Flex>
+      <Toaster />
     </form>
   );
 };

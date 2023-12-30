@@ -72,6 +72,7 @@ const ProfileCompletion = ({ params }: { params: { id: string } }) => {
             value={value}
             setRoleValue={setValue}
             roleErrors={errors}
+            params={params}
           />
           <Action page={page} pageCount={pageCount!} setPage={setPage} />
         </Box>
