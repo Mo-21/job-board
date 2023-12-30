@@ -131,4 +131,6 @@ export type RegistrationFormType = z.infer<typeof registerSchema>;
 export type UserProfileCreationFormType = z.infer<
   typeof userProfileCreationSchema
 >;
-type UserProfileCreationType = z.infer<typeof roleSelection>;
+export type RecruiterProfileCreationFormType = z.infer<
+  typeof recruiterProfileCreationSchema
+>;
