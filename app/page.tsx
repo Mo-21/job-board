@@ -9,6 +9,8 @@ export default function Home() {
   const { status, data: session } = useSession();
   const [callout, setCallout] = useState(false);
 
+  console.log(session?.user);
+
   useEffect(() => {
     if (session?.user && session?.user?.accountComplete === false)
       setCallout(true);

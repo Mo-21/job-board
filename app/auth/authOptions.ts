@@ -59,18 +59,14 @@ const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      return { ...token, ...user };
+      if (user) {
+        token = { ...token, ...user };
+      }
+      return token;
     },
-    async session({ session, token }) {
-      session.user = {
-        name: token.name,
-        email: token.email,
-        image: token.image,
-        role: token.role,
-        id: token.id,
-        accountComplete: token.accountComplete,
-      };
 
+    async session({ session, token }) {
+      session.user = token;
       return session;
     },
     async signIn({ user }) {
