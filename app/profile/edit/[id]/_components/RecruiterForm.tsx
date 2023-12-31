@@ -3,12 +3,7 @@ import { recruiterProfileCreationSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Flex } from "@radix-ui/themes";
 import { useState } from "react";
-import {
-  FieldErrors,
-  SubmitHandler,
-  UseFormRegister,
-  useForm,
-} from "react-hook-form";
+import { FieldErrors, SubmitHandler, UseFormRegister, useForm } from "react-hook-form";
 import { z } from "zod";
 import Links from "./Links";
 import PersonalInfo from "./PersonalInfo";
@@ -48,12 +43,9 @@ const RecruiterForm = ({ page, params }: Props) => {
     },
   ];
 
-  console.log(errors);
-
   const onSubmit: SubmitHandler<RecruiterType> = async (data, e) => {
     e?.preventDefault();
-    console.log(data);
-    const res = await axios
+    await axios
       .patch(`/api/register/profile/recruiters/${params.id}`, data)
       .catch((err) => {
         console.log(err);
@@ -65,8 +57,6 @@ const RecruiterForm = ({ page, params }: Props) => {
         setIsSubmitted(false);
         router.push(`/profile/${params.id}`);
       });
-
-    console.log(res);
   };
 
   return (
@@ -79,7 +69,7 @@ const RecruiterForm = ({ page, params }: Props) => {
             type="submit"
             color="green"
             className="flex-1"
-            // disabled={isSubmitted}
+            disabled={isSubmitted}
             onClick={() => setIsSubmitted(true)}
           >
             {isSubmitted && <Spinner />}
