@@ -1,6 +1,6 @@
 import authOptions from "@/app/auth/authOptions";
 import {
-  RecruiterProfileCreationFormType,
+  RecruiterType,
   recruiterProfileCreationSchema,
 } from "@/app/validationSchema";
 import { prisma } from "@/prisma/client";
@@ -16,7 +16,7 @@ export async function PATCH(
     return NextResponse.json("Not Authorized", { status: 401 });
   }
 
-  const body: RecruiterProfileCreationFormType = await request.json();
+  const body: RecruiterType = await request.json();
   const validation = recruiterProfileCreationSchema.safeParse(body);
   if (!validation.success) {
     return NextResponse.json(validation.error.format(), { status: 400 });
