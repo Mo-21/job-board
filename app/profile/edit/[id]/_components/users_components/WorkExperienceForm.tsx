@@ -1,19 +1,13 @@
 import ErrorCallout from "@/app/components/ErrorCallout";
 import { Heading, Card, Button } from "@radix-ui/themes";
 import { useFieldArray } from "react-hook-form";
-import { FormProps, inputClass } from "./ProfileCompletionForm";
+import { inputClass } from "../ProfileCompletionForm";
+import { ChildrenPropsType } from "./UserForm";
 
-const WorkExperience = ({
-  register,
-  errors,
-  control,
-  defaultValues,
-  workBlock,
-  setWorkBlock,
-}: FormProps & {
-  workBlock: number;
-  setWorkBlock: React.Dispatch<React.SetStateAction<number>>;
-}) => {
+const WorkExperience = ({ props }: ChildrenPropsType) => {
+  const { control, errors, register, blocks, defaultValues } = props;
+  const { workBlock, setWorkBlock } = blocks.work;
+
   const {
     fields: workExperienceFields,
     append: appendWorkExperienceField,

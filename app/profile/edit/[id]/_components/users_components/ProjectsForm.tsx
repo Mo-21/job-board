@@ -1,23 +1,14 @@
 import ErrorCallout from "@/app/components/ErrorCallout";
 import SelectMenu from "@/app/components/SkillsSelect";
-import { ProfileCreationFormType } from "@/app/validationSchema";
-import { Heading, Card, Button } from "@radix-ui/themes";
-import { UseFormSetValue, useFieldArray } from "react-hook-form";
-import { FormProps, inputClass } from "./ProfileCompletionForm";
+import { Button, Card, Heading } from "@radix-ui/themes";
+import { useFieldArray } from "react-hook-form";
+import { inputClass } from "../ProfileCompletionForm";
+import { ChildrenPropsType } from "./UserForm";
 
-const Projects = ({
-  register,
-  errors,
-  control,
-  defaultValues,
-  projectBlock,
-  setProjectBlock,
-  setValue,
-}: FormProps & {
-  projectBlock: number;
-  setProjectBlock: React.Dispatch<React.SetStateAction<number>>;
-  setValue: UseFormSetValue<ProfileCreationFormType>;
-}) => {
+const Projects = ({ props }: ChildrenPropsType) => {
+  const { control, errors, register, setValue, blocks, defaultValues } = props;
+  const { projectBlock, setProjectBlock } = blocks.projects;
+
   const {
     fields: projectFields,
     append: appendProjectField,
@@ -90,7 +81,7 @@ const Projects = ({
                   className="w-28"
                   my="3"
                   onClick={() => {
-                    appendProjectField(defaultValues?.projects!);
+                    appendProjectField(defaultValues?.projects);
                     setProjectBlock(projectBlock + 1);
                   }}
                 >

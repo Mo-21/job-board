@@ -1,19 +1,13 @@
 import ErrorCallout from "@/app/components/ErrorCallout";
 import { Heading, Card, Button } from "@radix-ui/themes";
 import { useFieldArray } from "react-hook-form";
-import { FormProps, inputClass } from "./ProfileCompletionForm";
+import { inputClass } from "../ProfileCompletionForm";
+import { ChildrenPropsType } from "./UserForm";
 
-const Education = ({
-  register,
-  errors,
-  control,
-  defaultValues,
-  educationBlock,
-  setEducationBlock,
-}: FormProps & {
-  educationBlock: number;
-  setEducationBlock: React.Dispatch<React.SetStateAction<number>>;
-}) => {
+const Education = ({ props }: ChildrenPropsType) => {
+  const { control, errors, register, blocks, defaultValues } = props;
+  const { educationBlock, setEducationBlock } = blocks.education;
+
   const {
     fields: educationFields,
     append: appendEducationField,

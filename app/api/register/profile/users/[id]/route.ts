@@ -1,8 +1,5 @@
 import authOptions from "@/app/auth/authOptions";
-import {
-  UserProfileCreationFormType,
-  userProfileCreationSchema,
-} from "@/app/validationSchema";
+import { UserType, userProfileCreationSchema } from "@/app/validationSchema";
 
 import { prisma } from "@/prisma/client";
 import { getServerSession } from "next-auth";
@@ -17,7 +14,7 @@ export async function PATCH(
     return NextResponse.json("Not Authorized", { status: 401 });
   }
 
-  const body: UserProfileCreationFormType = await request.json();
+  const body: UserType = await request.json();
   const validation = userProfileCreationSchema.safeParse(body);
   if (!validation.success) {
     return NextResponse.json(validation.error.format(), { status: 400 });
@@ -48,15 +45,17 @@ export async function PATCH(
       id: user.id,
     },
     data: {
-      name: name,
+      name,
       bio,
       location,
+      role: "JOB_SEEKER",
+      company: "",
       links: {
         github: links.github,
         linkedin: links.github,
         website: links.portfolio,
       },
-      skills: skills,
+      skills,
       accountComplete: true,
     },
   });
