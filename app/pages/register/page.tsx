@@ -1,18 +1,9 @@
 "use client";
 import { Button, Card, Heading, Flex } from "@radix-ui/themes";
-import styles from "../styles/RegisterPage.module.css";
-import {
-  SubmitHandler,
-  UseFormRegister,
-  UseFormSetValue,
-  useForm,
-} from "react-hook-form";
+import styles from "@/app/styles/RegisterPage.module.css";
+import { SubmitHandler, UseFormRegister, UseFormSetValue, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  RegistrationFormType,
-  registerSchema,
-  validatePasswords,
-} from "../../validationSchema";
+import { RegistrationFormType, registerSchema, validatePasswords } from "../../validationSchema";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
