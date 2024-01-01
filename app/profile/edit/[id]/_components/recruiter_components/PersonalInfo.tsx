@@ -1,12 +1,19 @@
-import ErrorCallout from "@/app/components/ErrorCallout";
+import { RecruiterType } from "@/app/validationSchema";
 import { Heading } from "@radix-ui/themes";
-import {  inputClass } from "./ProfileCompletionForm";
-import { RecruiterChildrenType } from "./RecruiterForm";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { inputClass } from "../ProfileCompletionForm";
+import ErrorCallout from "@/app/components/ErrorCallout";
 
-const PersonalInfo = ({ register, errors }: RecruiterChildrenType) => {
+interface Props {
+  register: UseFormRegister<RecruiterType>;
+  errors: FieldErrors<RecruiterType>;
+}
+
+const PersonalInfo = ({ register, errors }: Props) => {
   return (
     <>
       <Heading mb="5">Personal Information</Heading>
+
       <input
         type="text"
         placeholder="Name"

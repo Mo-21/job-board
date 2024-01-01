@@ -1,9 +1,15 @@
 import ErrorCallout from "@/app/components/ErrorCallout";
 import { Flex, Heading } from "@radix-ui/themes";
-import { inputClass } from "./ProfileCompletionForm";
-import { RecruiterChildrenType } from "./RecruiterForm";
+import { inputClass } from "../ProfileCompletionForm";
+import { RecruiterType } from "@/app/validationSchema";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
-const Links = ({ register, errors }: RecruiterChildrenType) => {
+interface Props {
+  register: UseFormRegister<RecruiterType>;
+  errors: FieldErrors<RecruiterType>;
+}
+
+const Links = ({ register, errors }: Props) => {
   return (
     <Flex direction="column">
       <Heading mb="5">Links</Heading>

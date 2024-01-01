@@ -1,17 +1,14 @@
 import Spinner from "@/app/components/Spinner";
-import { recruiterProfileCreationSchema } from "@/app/validationSchema";
+import { RecruiterType, recruiterProfileCreationSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Flex } from "@radix-ui/themes";
-import { useState } from "react";
-import { FieldErrors, SubmitHandler, UseFormRegister, useForm } from "react-hook-form";
-import { z } from "zod";
-import Links from "./Links";
-import PersonalInfo from "./PersonalInfo";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-
-export type RecruiterType = z.infer<typeof recruiterProfileCreationSchema>;
+import Links from "./Links";
+import PersonalInfo from "./PersonalInfo";
 
 interface Props {
   page: number;
@@ -35,7 +32,7 @@ const RecruiterForm = ({ page, params }: Props) => {
   const pages = [
     {
       label: "personal_info",
-      value: <PersonalInfo errors={errors} register={register} />,
+      value: <PersonalInfo register={register} errors={errors} />,
     },
     {
       label: "professional_info",
@@ -81,22 +78,5 @@ const RecruiterForm = ({ page, params }: Props) => {
     </form>
   );
 };
-
-interface RecruiterForm {
-  name: string;
-  location: string;
-  company: string;
-  links: {
-    linkedin?: string | null | undefined;
-    github?: string | null | undefined;
-    portfolio?: string | null | undefined;
-  };
-  bio?: string | null | undefined;
-}
-
-export interface RecruiterChildrenType {
-  register: UseFormRegister<RecruiterForm>;
-  errors: FieldErrors<RecruiterForm>;
-}
 
 export default RecruiterForm;
