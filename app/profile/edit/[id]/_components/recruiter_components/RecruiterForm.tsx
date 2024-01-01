@@ -45,7 +45,6 @@ const RecruiterForm = ({ page, params }: Props) => {
     await axios
       .patch(`/api/register/profile/recruiters/${params.id}`, data)
       .catch((err) => {
-        console.log(err);
         toast.error(
           "Something went wrong, please check your entries one more time"
         );

@@ -51,7 +51,6 @@ const Register = () => {
         await axios
           .post("/api/register", data)
           .catch((err) => {
-            console.log(err);
             toast.error(err.response.data.error);
           })
           .finally(() => {
@@ -59,7 +58,7 @@ const Register = () => {
           });
         router.push("/api/auth/signin");
       } catch (error) {
-        console.log(error);
+        throw new Error("Something went wrong! Please try again.");
       }
     }
   };

@@ -5,7 +5,14 @@ import { UserType, userProfileCreationSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Flex, Heading } from "@radix-ui/themes";
 import React, { useState } from "react";
-import { Control, FieldErrors, SubmitHandler, UseFormRegister, UseFormSetValue, useForm } from "react-hook-form";
+import {
+  Control,
+  FieldErrors,
+  SubmitHandler,
+  UseFormRegister,
+  UseFormSetValue,
+  useForm,
+} from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import Education from "./EducationForm";
 import Projects from "./ProjectsForm";
@@ -74,7 +81,6 @@ const UserForm = ({ userArrayProps, params, page }: Props) => {
     await axios
       .patch(`/api/register/profile/users/${params.id}`, data)
       .catch((err) => {
-        console.log(err);
         toast.error(
           "Something went wrong, please check your entries one more time"
         );
