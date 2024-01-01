@@ -11,7 +11,7 @@ import Spinner from "../../components/Spinner";
 import ErrorCallout from "../../components/ErrorCallout";
 import { useState } from "react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
-import defaultImage from "@/public/default.png";
+import defaultImage from "@/app/assets/default.png";
 import Image from "next/image";
 
 const Register = () => {
