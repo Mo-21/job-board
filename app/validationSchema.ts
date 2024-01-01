@@ -128,9 +128,5 @@ export const validatePasswords = (data: RegistrationFormType) => {
 };
 
 export type RegistrationFormType = z.infer<typeof registerSchema>;
-export type UserProfileCreationFormType = z.infer<
-  typeof userProfileCreationSchema
->;
-export type RecruiterProfileCreationFormType = z.infer<
-  typeof recruiterProfileCreationSchema
->;
+export type UserType = z.infer<typeof userProfileCreationSchema>;
+export type RecruiterType = z.infer<typeof recruiterProfileCreationSchema>;
