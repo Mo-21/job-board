@@ -86,7 +86,13 @@ const UserAvatar = () => {
             <DropdownMenu.Label>{session.user?.email}</DropdownMenu.Label>
             <DropdownMenu.Label>{session.user?.name}</DropdownMenu.Label>
             <DropdownMenu.Item>
-              <Link href={`/profile/${session?.user?.id}`}>Profile</Link>
+              <Link
+                href={`/profile/${
+                  session?.user.role === "RECRUITER" ? "recruiters" : "users"
+                }/${session?.user?.id}`}
+              >
+                Profile
+              </Link>
             </DropdownMenu.Item>
             <DropdownMenu.Item
               onClick={() => signOut({ redirect: true, callbackUrl: "/" })}
