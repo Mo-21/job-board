@@ -9,6 +9,8 @@ import { getServerSession } from "next-auth";
 import UserImage from "@/app/components/UserImage";
 import ReactMarkdown from "react-markdown";
 import authOptions from "@/app/auth/authOptions";
+import JobDetails from "./JobDetails";
+import JobActions from "./JobActions";
 
 interface Props {
   params: {
@@ -51,43 +53,8 @@ const JobDetailsPage = async ({ params }: Props) => {
       p="4"
       gap="4"
     >
-      <Card className="md:col-span-3">
-        <Flex p="2" gap="2" align="center" direction="column">
-          <Heading>{job.title}</Heading>
-          <LevelBadge level={job.level} />
-          <Text>
-            {job.company} - {job.location}
-          </Text>
-          <DateFormatted date={job.createdAt} />
-          <ReactMarkdown>{job.description}</ReactMarkdown>
-          <ReactMarkdown>{job.qualifications}</ReactMarkdown>
-        </Flex>
-      </Card>
-      <Flex justify="center" gap="3" direction="column">
-        <Card>
-          <Heading size="5" mb="5">
-            Recruiter:
-          </Heading>
-          <Flex direction="column" gap="3" align="center">
-            <UserImage
-              props={{ image: job.PostedBy?.image, width: 130, height: 130 }}
-            />
-            <Heading size="5">{job.PostedBy?.name}</Heading>
-          </Flex>
-        </Card>
-        <Button>
-          <Flex align="center" gap="4">
-            <PaperPlaneIcon />
-            <Box>Apply</Box>
-          </Flex>
-        </Button>
-        <Button color="purple">
-          <Flex align="center" gap="2">
-            <DownloadIcon />
-            <Box>Save</Box>
-          </Flex>
-        </Button>
-      </Flex>
+      <JobDetails job={job} />
+      <JobActions job={job} />
     </Grid>
   );
 };
