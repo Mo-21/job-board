@@ -4,6 +4,8 @@ import { Callout } from "@radix-ui/themes";
 import React, { PropsWithChildren } from "react";
 
 const ErrorCallout = ({ children }: PropsWithChildren) => {
+  if (!children) return null;
+
   return (
     <Callout.Root mb="3" color="red">
       <Callout.Icon>

@@ -4,21 +4,24 @@ import styles from "../styles/SelectMenu.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowDownIcon } from "@radix-ui/react-icons";
 import { UseFormSetValue } from "react-hook-form";
-import { ProfileCreationFormType } from "../validationSchema";
+import { UserType } from "../validationSchema";
+import { JobType } from "../jobs/create/page";
 
 interface SelectMenuProps {
-  setValue: UseFormSetValue<ProfileCreationFormType>;
+  setValue?: UseFormSetValue<UserType>;
+  setJobsSkills?: UseFormSetValue<JobType>;
 }
 
-const SelectMenu = ({ setValue }: SelectMenuProps) => {
+const SelectMenu = ({ setValue, setJobsSkills }: SelectMenuProps) => {
   const [skills, setSkills] = useState<string[]>(skillsArray);
   const [query, setQuery] = useState<string>("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    setValue("skills", selectedSkills);
-  }, [setValue, selectedSkills]);
+    if (setValue) setValue("skills", selectedSkills);
+    if (setJobsSkills) setJobsSkills("skills", selectedSkills);
+  }, [setValue, setJobsSkills, selectedSkills]);
 
   const filteredSkills = useMemo(() => {
     if (!query) return skills;

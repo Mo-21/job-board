@@ -127,6 +127,18 @@ export const validatePasswords = (data: RegistrationFormType) => {
   return true;
 };
 
+export const jobSchema = z.object({
+  title: z.string().min(2, "Name is Required").max(255),
+  description: z.string().max(2000),
+  qualifications: z.string().max(2000),
+  skills: z.array(z.string()).min(1, "Skills is Required").max(10),
+  level: z.enum(["JUNIOR", "MIDDLE", "SENIOR", "MANAGER"], {
+    required_error: "Job Level is required",
+  }),
+  location: z.string().min(1, "Location is Required").max(255),
+  company: z.string().min(1, "Company is Required").max(255),
+});
+
 export type RegistrationFormType = z.infer<typeof registerSchema>;
 export type UserType = z.infer<typeof userProfileCreationSchema>;
 export type RecruiterType = z.infer<typeof recruiterProfileCreationSchema>;
