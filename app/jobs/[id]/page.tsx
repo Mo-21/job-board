@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma/client";
 import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
-import React from "react";
+import React, { cache } from "react";
 import NotFoundJobPage from "./not-found";
 import LevelBadge from "@/app/components/LevelBadge";
 import DateFormatted from "@/app/components/DateFormatted";
@@ -8,6 +8,7 @@ import { DownloadIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import { getServerSession } from "next-auth";
 import UserImage from "@/app/components/UserImage";
 import ReactMarkdown from "react-markdown";
+import authOptions from "@/app/auth/authOptions";
 
 interface Props {
   params: {
@@ -15,15 +16,13 @@ interface Props {
   };
 }
 
-const JobDetailsPage = async ({ params }: Props) => {
-  const session = await getServerSession();
-
-  const job = await prisma.job.findUnique({
-    where: { id: params.id },
+const fetchJob = cache((jobId: string, recruiterId: string | undefined) =>
+  prisma.job.findUnique({
+    where: { id: jobId },
     include: {
       PostedBy: {
         where: {
-          id: session?.user.id,
+          id: recruiterId,
         },
         select: {
           id: true,
@@ -33,7 +32,13 @@ const JobDetailsPage = async ({ params }: Props) => {
         },
       },
     },
-  });
+  })
+);
+
+const JobDetailsPage = async ({ params }: Props) => {
+  const session = await getServerSession(authOptions);
+
+  const job = await fetchJob(params.id, session?.user.id);
 
   if (!job) return <NotFoundJobPage />;
 
