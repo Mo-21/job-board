@@ -20,7 +20,7 @@ const EditButton = ({ session, recruiterId, jobId }: Props) => {
 
   return (
     <Button color="blue">
-      <Link href={`/jobs/create/${jobId}`}>
+      <Link href={`/jobs/edit/${jobId}`}>
         <Flex align="center" gap="2">
           <TrashIcon />
           <Box>Edit</Box>
