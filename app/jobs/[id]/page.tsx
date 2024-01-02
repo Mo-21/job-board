@@ -7,6 +7,7 @@ import DateFormatted from "@/app/components/DateFormatted";
 import { DownloadIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import { getServerSession } from "next-auth";
 import UserImage from "@/app/components/UserImage";
+import ReactMarkdown from "react-markdown";
 
 interface Props {
   params: {
@@ -53,8 +54,8 @@ const JobDetailsPage = async ({ params }: Props) => {
             {job.company} - {job.location}
           </Text>
           <DateFormatted date={job.createdAt} />
-          <Text>{job.qualifications}</Text>
-          <Text>{job.description}</Text>
+          <ReactMarkdown>{job.description}</ReactMarkdown>
+          <ReactMarkdown>{job.qualifications}</ReactMarkdown>
         </Flex>
       </Card>
       <Flex justify="center" gap="3" direction="column">
