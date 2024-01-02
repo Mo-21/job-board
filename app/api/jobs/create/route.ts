@@ -8,6 +8,14 @@ export async function POST(request: NextRequest) {
 
   const recruiter = await getServerSession();
 
+  if (!recruiter) return NextResponse.json("No User Found", { status: 400 });
+
+  const currentRecruiter = await prisma.user.findUnique({
+    where: {
+      email: recruiter.user.email,
+    },
+  });
+
   const validation = jobSchema.safeParse(body);
   if (!validation.success) {
     return NextResponse.json(
@@ -35,7 +43,7 @@ export async function POST(request: NextRequest) {
       qualifications,
       title,
       skills,
-      recruiterId: recruiter?.user.id,
+      recruiterId: currentRecruiter?.id,
     },
   });
 
