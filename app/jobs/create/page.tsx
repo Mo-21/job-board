@@ -17,12 +17,16 @@ import Spinner from "@/app/components/Spinner";
 import ErrorCallout from "@/app/components/ErrorCallout";
 import { Job, Level } from "@prisma/client";
 import SelectMenu from "@/app/components/SkillsSelect";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export type JobType = z.infer<typeof jobSchema>;
 
 const CreateJob = ({ job }: { job?: Job }) => {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const router = useRouter();
 
   const {
     register,
@@ -34,9 +38,21 @@ const CreateJob = ({ job }: { job?: Job }) => {
     resolver: zodResolver(jobSchema),
   });
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data, e) => {
+    e?.preventDefault();
+    setIsSubmitting(true);
+
     try {
-      console.log(data);
+      await axios
+        .post("/api/jobs/create", data)
+        .catch((error) => {
+          setError(error);
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+          router.push("/");
+          //   router.refresh();
+        });
     } catch (error) {
       setError("Something went wrong");
     }
