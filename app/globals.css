@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+.my-config {
+  --darkmode: 0;
+  --h-accent: 144;
+  --s-accent: 67%;
+  --l-accent: 57%;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
 }
