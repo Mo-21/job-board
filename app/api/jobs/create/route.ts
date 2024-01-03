@@ -1,3 +1,4 @@
+import authOptions from "@/app/auth/authOptions";
 import { jobSchema } from "@/app/validationSchema";
 import { prisma } from "@/prisma/client";
 import { getServerSession } from "next-auth";
@@ -6,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
-  const recruiter = await getServerSession();
+  const recruiter = await getServerSession(authOptions);
 
   if (!recruiter) return NextResponse.json("No User Found", { status: 400 });
 
