@@ -1,7 +1,7 @@
 import { prisma } from "@/prisma/client";
 import { Job } from "@prisma/client";
 import React from "react";
-import JobList from "../_components/JobList";
+import JobList from "../../_components/JobList";
 import { Flex, Heading, Grid } from "@radix-ui/themes";
 
 const SimilarJobs = async ({ job }: { job: Job }) => {

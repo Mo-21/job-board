@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth/next";
 import ApplyButton from "./ApplyButton";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
-import NotFoundJobPage from "./not-found";
+import NotFoundJobPage from "../not-found";
 
 interface Props {
   recruiterId: string | undefined;

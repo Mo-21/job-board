@@ -3,9 +3,9 @@ import { prisma } from "@/prisma/client";
 import { Flex, Grid } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import { cache } from "react";
-import JobActions from "./JobActions";
-import JobDetails from "./JobDetails";
-import SimilarJobs from "./SimilarJobs";
+import JobActions from "./_components/JobActions";
+import JobDetails from "./_components/JobDetails";
+import SimilarJobs from "./_components/SimilarJobs";
 import NotFoundJobPage from "./not-found";
 
 interface Props {
