@@ -11,6 +11,7 @@ import ReactMarkdown from "react-markdown";
 import authOptions from "@/app/auth/authOptions";
 import JobDetails from "./JobDetails";
 import JobActions from "./JobActions";
+import SimilarJobs from "./SimilarJobs";
 
 interface Props {
   params: {
@@ -45,16 +46,18 @@ const JobDetailsPage = async ({ params }: Props) => {
   if (!job) return <NotFoundJobPage />;
 
   return (
-    <Grid
-      columns={{
-        initial: "1",
-        sm: "4",
-      }}
-      p="4"
-      gap="4"
-    >
-      <JobDetails job={job} />
-      <JobActions job={job} />
+    <Grid gap="3" columns={{ initial: "1", sm: "4" }} p="4">
+      <Flex className="col-span-3" direction="column">
+        <JobDetails job={job} />
+        {session?.user.role === "JOB_SEEKER" ? (
+          <SimilarJobs job={job} />
+        ) : (
+          <div>Hello Recruiter</div>
+        )}
+      </Flex>
+      <Flex className="col-span-1" direction="column">
+        <JobActions job={job} />
+      </Flex>
     </Grid>
   );
 };

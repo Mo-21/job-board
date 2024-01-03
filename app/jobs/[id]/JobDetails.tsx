@@ -1,5 +1,6 @@
 import DateFormatted from "@/app/components/DateFormatted";
 import LevelBadge from "@/app/components/LevelBadge";
+import { SkillBadge } from "@/app/components/SkillBadge";
 import { Job } from "@prisma/client";
 import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import React from "react";
@@ -11,6 +12,7 @@ const JobDetails = ({ job }: { job: Job }) => {
       <Flex p="2" gap="2" align="center" direction="column">
         <Heading>{job.title}</Heading>
         <LevelBadge level={job.level} />
+        <SkillBadge job={job} />
         <Text>
           {job.company} - {job.location}
         </Text>
