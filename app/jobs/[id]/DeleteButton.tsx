@@ -21,6 +21,7 @@ const DeleteButton = ({ session, recruiterId, jobId }: Props) => {
   if (session.user.id !== recruiterId) return <Heading>Not Authorized</Heading>;
 
   const handleJobDeletion = async () => {
+    setIsSubmitted(true);
     axios
       .delete(`/api/jobs/${jobId}`)
       .catch(() => {
@@ -29,6 +30,7 @@ const DeleteButton = ({ session, recruiterId, jobId }: Props) => {
       .finally(() => {
         setIsSubmitted(false);
         router.push("/jobs");
+        router.refresh();
       });
   };
 
