@@ -1,8 +1,6 @@
 import UserImage from "@/app/components/UserImage";
-import { Job, User } from "@prisma/client";
-import { PaperPlaneIcon, DownloadIcon } from "@radix-ui/react-icons";
-import { Flex, Card, Heading, Button, Box } from "@radix-ui/themes";
-import React from "react";
+import { Job } from "@prisma/client";
+import { Card, Flex, Heading } from "@radix-ui/themes";
 import ActionButtons from "./ActionButtons";
 
 interface JobWithRecruiter extends Job {

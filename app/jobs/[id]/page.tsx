@@ -1,17 +1,12 @@
-import { prisma } from "@/prisma/client";
-import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
-import React, { cache } from "react";
-import NotFoundJobPage from "./not-found";
-import LevelBadge from "@/app/components/LevelBadge";
-import DateFormatted from "@/app/components/DateFormatted";
-import { DownloadIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
-import { getServerSession } from "next-auth";
-import UserImage from "@/app/components/UserImage";
-import ReactMarkdown from "react-markdown";
 import authOptions from "@/app/auth/authOptions";
-import JobDetails from "./JobDetails";
+import { prisma } from "@/prisma/client";
+import { Flex, Grid } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
+import { cache } from "react";
 import JobActions from "./JobActions";
+import JobDetails from "./JobDetails";
 import SimilarJobs from "./SimilarJobs";
+import NotFoundJobPage from "./not-found";
 
 interface Props {
   params: {

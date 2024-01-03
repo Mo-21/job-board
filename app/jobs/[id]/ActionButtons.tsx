@@ -1,17 +1,11 @@
 import authOptions from "@/app/auth/authOptions";
-import {
-  PaperPlaneIcon,
-  DownloadIcon,
-  Pencil2Icon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
-import { Button, Flex, Box } from "@radix-ui/themes";
+import { DownloadIcon } from "@radix-ui/react-icons";
+import { Box, Button, Flex } from "@radix-ui/themes";
 import { getServerSession } from "next-auth/next";
-import React from "react";
-import NotFoundJobPage from "./not-found";
+import ApplyButton from "./ApplyButton";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
-import ApplyButton from "./ApplyButton";
+import NotFoundJobPage from "./not-found";
 
 interface Props {
   recruiterId: string | undefined;

@@ -2,9 +2,8 @@ import DateFormatted from "@/app/components/DateFormatted";
 import LevelBadge from "@/app/components/LevelBadge";
 import { SkillBadge } from "@/app/components/SkillBadge";
 import { Job } from "@prisma/client";
-import { Badge, Card, Flex, Heading, Text } from "@radix-ui/themes";
+import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
-import React from "react";
 
 const JobList = ({ jobs }: { jobs: Job[] }) => {
   return (
