@@ -11,6 +11,7 @@ import React from "react";
 import NotFoundJobPage from "./not-found";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
+import ApplyButton from "./ApplyButton";
 
 interface Props {
   recruiterId: string | undefined;
@@ -26,12 +27,7 @@ const ActionButtons = async ({ recruiterId, jobId }: Props) => {
     <Flex direction="column" gap="2" mt="3">
       {session.user.role === "JOB_SEEKER" ? (
         <>
-          <Button color="green">
-            <Flex align="center" gap="4">
-              <PaperPlaneIcon />
-              <Box>Apply</Box>
-            </Flex>
-          </Button>
+          <ApplyButton jobId={jobId} />
           <Button color="purple">
             <Flex align="center" gap="2">
               <DownloadIcon />
