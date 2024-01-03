@@ -2,7 +2,13 @@
 import "easymde/dist/easymde.min.css";
 import { jobSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Callout, Container, Select, TextField } from "@radix-ui/themes";
+import {
+  Button,
+  Callout,
+  Container,
+  Select,
+  TextField,
+} from "@radix-ui/themes";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -37,16 +43,29 @@ const JobForm = ({ job }: { job?: Job | null }) => {
     setIsSubmitting(true);
 
     try {
-      await axios
-        .post("/api/jobs/create", data)
-        .catch((error) => {
-          setError(error);
-        })
-        .finally(() => {
-          setIsSubmitting(false);
-          router.push("/jobs");
-          router.refresh();
-        });
+      if (job) {
+        await axios
+          .patch(`/api/jobs/${job.id}`, data)
+          .catch((error) => {
+            setError(error);
+          })
+          .finally(() => {
+            setIsSubmitting(false);
+            router.push("/jobs");
+            router.refresh();
+          });
+      } else {
+        await axios
+          .post("/api/jobs/create", data)
+          .catch((error) => {
+            setError(error);
+          })
+          .finally(() => {
+            setIsSubmitting(false);
+            router.push("/jobs");
+            router.refresh();
+          });
+      }
     } catch (error) {
       setError("Something went wrong");
     }
@@ -59,7 +78,7 @@ const JobForm = ({ job }: { job?: Job | null }) => {
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
-      <form className="space-y-4" onSubmit={onSubmit}>
+      <form className="space-y-4 mb-5" onSubmit={onSubmit}>
         <TextField.Root>
           <TextField.Input
             defaultValue={job?.title}
@@ -69,7 +88,7 @@ const JobForm = ({ job }: { job?: Job | null }) => {
         </TextField.Root>
         <ErrorCallout>{errors.title?.message}</ErrorCallout>
 
-        <TextField.Root>
+        <TextField.Root defaultValue={job?.level}>
           <TextField.Input
             defaultValue={job?.company}
             placeholder="Company"
@@ -89,6 +108,7 @@ const JobForm = ({ job }: { job?: Job | null }) => {
 
         <Select.Root
           required
+          defaultValue={job?.level}
           onValueChange={(value: Level) => setValue("level", value)}
         >
           <Select.Trigger defaultValue="Select Level" />
@@ -123,7 +143,7 @@ const JobForm = ({ job }: { job?: Job | null }) => {
           )}
         />
         <ErrorCallout>{errors.description?.message}</ErrorCallout>
-        <Button color="green">
+        <Button disabled={isSubmitting} color="green">
           {job ? "Update Issue" : "Create Issue"} {isSubmitting && <Spinner />}
         </Button>
       </form>
