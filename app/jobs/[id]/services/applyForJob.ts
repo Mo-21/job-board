@@ -6,7 +6,7 @@ const useApply = (JobId: string | undefined) => {
 
   const applyForJob = async (data: { userId: string; resumeId: string }) => {
     try {
-      const res = await axios.patch("/", data);
+      const res = await axios.patch(`/api/jobs/apply/${JobId}`, data);
       setStatus(res.status);
     } catch (error) {
       console.error("Error applying for job:", error);

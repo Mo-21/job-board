@@ -1,29 +1,36 @@
 "use client";
 import * as LR from "@uploadcare/blocks";
 import { OutputFileEntry } from "@uploadcare/blocks";
-import { useEffect, useRef, useState } from "react";
-import useApply from "../services/applyForJob";
+import { useSession } from "next-auth/react";
+import { useEffect, useRef } from "react";
 
 LR.registerBlocks(LR);
 
 interface Props {
-  setIsApplied: React.Dispatch<React.SetStateAction<boolean | undefined>>;
-  jobId: string | undefined;
+  setData: React.Dispatch<
+    React.SetStateAction<{ userId: string; resumeId: string } | undefined>
+  >;
 }
 
-function UploadResume({ setIsApplied, jobId }: Props) {
-  const [uploadedFiles, setUploadedFiles] = useState<OutputFileEntry[]>([]);
+function UploadResume({ setData }: Props) {
   const ctxProviderRef = useRef<
     typeof LR.UploadCtxProvider.prototype & LR.UploadCtxProvider
   >(null);
 
-  const { applyForJob, status } = useApply(jobId);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const handleUploadEvent = (e: CustomEvent<OutputFileEntry[]>) => {
-      if (e.detail) {
-        setUploadedFiles([...e.detail]);
-        const data = {};
+      const updatedFiles = e.detail;
+      if (updatedFiles && updatedFiles.length > 0) {
+        const firstUploadedFile = updatedFiles[0];
+        if (session && firstUploadedFile && firstUploadedFile.uuid) {
+          const data = {
+            resumeId: firstUploadedFile.uuid,
+            userId: session.user.id,
+          };
+          setData(data);
+        }
       }
     };
 
@@ -41,7 +48,7 @@ function UploadResume({ setIsApplied, jobId }: Props) {
         );
       };
     }
-  }, [setUploadedFiles]);
+  }, [session, setData]);
 
   return (
     <div className="flex justify-center">

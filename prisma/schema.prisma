@@ -29,6 +29,7 @@ model User {
   links           Links?
   accounts        Account[]
   sessions        Session[]
+  resume          String?
   jobsApplied     Job[]             @relation("AppliedJobs")
   jobsPosted      Job[]             @relation("PostedJobs")
 }
@@ -46,7 +47,7 @@ model Job {
   updatedAt      DateTime @updatedAt
   PostedBy       User?    @relation(name: "PostedJobs", fields: [recruiterId], references: [id])
   AppliedBy      User?    @relation(name: "AppliedJobs", fields: [usersId], references: [id])
-  usersId        String[] @default([""]) @db.ObjectId
+  usersId        String[] @db.ObjectId
   recruiterId    String?  @db.ObjectId
 }
 
