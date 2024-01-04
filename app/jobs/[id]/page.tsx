@@ -15,31 +15,26 @@ interface Props {
   };
 }
 
-const fetchJob = cache((jobId: string, recruiterId: string | undefined) =>
+const fetchJob = cache((jobId: string) =>
   prisma.job.findUnique({
     where: { id: jobId },
-    include: {
-      PostedBy: {
-        where: {
-          id: recruiterId,
-        },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          image: true,
-        },
-      },
-    },
   })
 );
 
 const JobDetailsPage = async ({ params }: Props) => {
   const session = await getServerSession(authOptions);
 
-  const job = await fetchJob(params.id, session?.user.id);
+  const job = await fetchJob(params.id);
 
   if (!job) return <NotFoundJobPage />;
+
+  if (!job.recruiterId) return <div>Sorry</div>;
+
+  const recruiter = await prisma.user.findUnique({
+    where: {
+      id: job.recruiterId,
+    },
+  });
 
   return (
     <Grid gap="3" columns={{ initial: "1", sm: "4" }} p="4">
@@ -53,12 +48,11 @@ const JobDetailsPage = async ({ params }: Props) => {
       </Flex>
       {session && (
         <Flex className="col-span-1" direction="column">
-          <Heading size="5" mb="5">
-            Recruiter:
-          </Heading>
           <Flex direction="column" gap="3" align="center">
-            <UserImage props={{ image: job.PostedBy?.image, width: 130, height: 130 }} />
-            <Heading size="5">{job.PostedBy?.name}</Heading>
+            <UserImage
+              props={{ image: recruiter?.image, width: 130, height: 130 }}
+            />
+            <Heading size="5">{recruiter?.name}</Heading>
           </Flex>
           <ActionButtons jobId={job.id} recruiterId={job?.recruiterId} />
         </Flex>
