@@ -1,12 +1,13 @@
 import authOptions from "@/app/auth/authOptions";
 import { prisma } from "@/prisma/client";
-import { Flex, Grid } from "@radix-ui/themes";
+import { Flex, Grid, Heading } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import { cache } from "react";
-import JobActions from "./_components/JobActions";
 import JobDetails from "./_components/JobDetails";
 import SimilarJobs from "./_components/SimilarJobs";
 import NotFoundJobPage from "./not-found";
+import UserImage from "@/app/components/UserImage";
+import ActionButtons from "./_components/ActionButtons";
 
 interface Props {
   params: {
@@ -50,9 +51,18 @@ const JobDetailsPage = async ({ params }: Props) => {
           <div>Hello Recruiter</div>
         )}
       </Flex>
-      <Flex className="col-span-1" direction="column">
-        <JobActions job={job} />
-      </Flex>
+      {session && (
+        <Flex className="col-span-1" direction="column">
+          <Heading size="5" mb="5">
+            Recruiter:
+          </Heading>
+          <Flex direction="column" gap="3" align="center">
+            <UserImage props={{ image: job.PostedBy?.image, width: 130, height: 130 }} />
+            <Heading size="5">{job.PostedBy?.name}</Heading>
+          </Flex>
+          <ActionButtons jobId={job.id} recruiterId={job?.recruiterId} />
+        </Flex>
+      )}
     </Grid>
   );
 };

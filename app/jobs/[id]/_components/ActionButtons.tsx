@@ -8,7 +8,7 @@ import EditButton from "./EditButton";
 import NotFoundJobPage from "../not-found";
 
 interface Props {
-  recruiterId: string | undefined;
+  recruiterId: string | null;
   jobId: string | undefined;
 }
 

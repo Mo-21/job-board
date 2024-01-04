@@ -1,18 +1,27 @@
 "use client";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
-import { Button, Flex, Box } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { Box, Button, Flex } from "@radix-ui/themes";
+import { useState } from "react";
+import UploadResume from "./UploadResume";
 
 const ApplyButton = ({ jobId }: { jobId: string | undefined }) => {
-  const router = useRouter();
+  const [isShown, setIsShown] = useState(false);
+  const [isApplied, setIsApplied] = useState<boolean>();
+
   return (
-    <Button onClick={() => router.push(`/jobs/apply/${jobId}`)} color="green">
-      <Flex align="center" gap="4">
-        <PaperPlaneIcon />
-        <Box>Apply</Box>
-      </Flex>
-    </Button>
+    <>
+      {isShown && <UploadResume jobId={jobId} setIsApplied={setIsApplied} />}
+      <Button
+        disabled={isApplied}
+        onClick={() => setIsShown(true)}
+        color="green"
+      >
+        <Flex align="center" gap="4">
+          <PaperPlaneIcon />
+          <Box>Apply</Box>
+        </Flex>
+      </Button>
+    </>
   );
 };
 
