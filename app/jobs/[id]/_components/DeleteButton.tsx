@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 interface Props {
   session: Session;
-  recruiterId: string | undefined;
+  recruiterId: string | null;
   jobId: string | undefined;
 }
 

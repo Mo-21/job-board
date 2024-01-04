@@ -1,17 +1,12 @@
 "use client";
-import Spinner from "@/app/components/Spinner";
 import { TrashIcon } from "@radix-ui/react-icons";
-import { Heading, Button, Flex, Box } from "@radix-ui/themes";
-import axios from "axios";
+import { Box, Button, Flex, Heading } from "@radix-ui/themes";
 import { Session } from "next-auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import toast from "react-hot-toast";
 
 interface Props {
   session: Session;
-  recruiterId: string | undefined;
+  recruiterId: string | null;
   jobId: string | undefined;
 }
 
