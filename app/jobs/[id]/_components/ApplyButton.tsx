@@ -4,17 +4,20 @@ import { Box, Button, Flex } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import useApply from "../services/applyForJob";
 import UploadResume from "./UploadResume";
+import { Job } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
-const ApplyButton = ({ jobId }: { jobId: string | undefined }) => {
+const ApplyButton = ({ job }: { job: Job }) => {
   const [isShown, setIsShown] = useState(false);
   const [isApplied, setIsApplied] = useState<boolean>();
   const [data, setData] = useState<{ userId: string; resumeId: string }>();
 
-  const { applyForJob, status: resStatus } = useApply(jobId);
+  const { applyForJob, status: resStatus } = useApply(job.id);
+
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     if (data) applyForJob(data);
-    console.log(resStatus);
     if (resStatus === 201) setIsApplied(true);
   }, [isApplied, setIsApplied, applyForJob, resStatus, data]);
 
@@ -22,13 +25,21 @@ const ApplyButton = ({ jobId }: { jobId: string | undefined }) => {
     <>
       {isShown && <UploadResume setData={setData} />}
       <Button
-        disabled={isApplied}
+        disabled={
+          isApplied ||
+          job.usersId.includes(session?.user.id!) ||
+          status === "loading"
+        }
         onClick={() => setIsShown(true)}
         color="green"
       >
         <Flex align="center" gap="4">
           <PaperPlaneIcon />
-          <Box>Apply</Box>
+          <Box>
+            {job.usersId.includes(session?.user.id!)
+              ? "You have already applied"
+              : "Apply"}
+          </Box>
         </Flex>
       </Button>
     </>

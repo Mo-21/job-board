@@ -6,13 +6,14 @@ import ApplyButton from "./ApplyButton";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
 import NotFoundJobPage from "../not-found";
+import { Job } from "@prisma/client";
 
 interface Props {
   recruiterId: string | null;
-  jobId: string | undefined;
+  job: Job;
 }
 
-const ActionButtons = async ({ recruiterId, jobId }: Props) => {
+const ActionButtons = async ({ recruiterId, job }: Props) => {
   const session = await getServerSession(authOptions);
 
   if (!session) return <NotFoundJobPage />;
@@ -21,7 +22,7 @@ const ActionButtons = async ({ recruiterId, jobId }: Props) => {
     <Flex direction="column" gap="2" mt="3">
       {session.user.role === "JOB_SEEKER" ? (
         <>
-          <ApplyButton jobId={jobId} />
+          <ApplyButton job={job} />
           <Button color="purple">
             <Flex align="center" gap="2">
               <DownloadIcon />
@@ -32,12 +33,12 @@ const ActionButtons = async ({ recruiterId, jobId }: Props) => {
       ) : session.user.role === "RECRUITER" ? (
         <>
           <EditButton
-            jobId={jobId}
+            jobId={job.id}
             recruiterId={recruiterId}
             session={session}
           />
           <DeleteButton
-            jobId={jobId}
+            jobId={job.id}
             recruiterId={recruiterId}
             session={session}
           />
