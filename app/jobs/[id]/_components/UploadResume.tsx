@@ -2,6 +2,7 @@
 import * as LR from "@uploadcare/blocks";
 import { OutputFileEntry } from "@uploadcare/blocks";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 LR.registerBlocks(LR);
@@ -19,6 +20,8 @@ function UploadResume({ setData }: Props) {
 
   const { data: session } = useSession();
 
+  const router = useRouter();
+
   useEffect(() => {
     const handleUploadEvent = (e: CustomEvent<OutputFileEntry[]>) => {
       const updatedFiles = e.detail;
@@ -30,6 +33,7 @@ function UploadResume({ setData }: Props) {
             userId: session.user.id,
           };
           setData(data);
+          router.refresh();
         }
       }
     };
@@ -48,7 +52,7 @@ function UploadResume({ setData }: Props) {
         );
       };
     }
-  }, [session, setData]);
+  }, [session, setData, router]);
 
   return (
     <div className="flex justify-center">
