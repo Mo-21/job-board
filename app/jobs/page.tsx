@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma/client";
 import { Flex, Grid } from "@radix-ui/themes";
-import JobList from "./_components/JobList";
+import JobList from "../components/JobList";
 import Toolbar from "./_components/Toolbar";
 import { Job, Level } from "@prisma/client";
 import { getServerSession } from "next-auth";

@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 import { Watch } from "react-loader-spinner";
 import RecruiterDashboard from "./RecruiterDashboard";
+import UserDashboard from "./UserDashboard";
 
 export default function Home() {
   const { status, data: session } = useSession();
@@ -23,6 +24,16 @@ export default function Home() {
   }
 
   return (
-    <>{session?.user.role === "RECRUITER" ? <RecruiterDashboard /> : ""}</>
+    <>
+      {session ? (
+        session?.user.role === "RECRUITER" ? (
+          <RecruiterDashboard />
+        ) : (
+          <UserDashboard />
+        )
+      ) : (
+        ""
+      )}
+    </>
   );
 }
