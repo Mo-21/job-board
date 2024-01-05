@@ -1,10 +1,7 @@
 "use client";
-import { handleValueChange } from "@/app/services/handleFilterValueChange";
 import { Job } from "@prisma/client";
-import { Button, Flex, Select, Text } from "@radix-ui/themes";
+import { Button, Flex } from "@radix-ui/themes";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
 import { IssuesPageProps } from "../page";
 
 const OrderBy = ({ searchParams }: IssuesPageProps) => {

@@ -1,6 +1,6 @@
 import authOptions from "@/app/auth/authOptions";
+import JobList from "@/app/components/JobList";
 import UserImage from "@/app/components/UserImage";
-import JobList from "@/app/jobs/_components/JobList";
 import { prisma } from "@/prisma/client";
 import { Education, Project, User, Work_Experience } from "@prisma/client";
 import {
@@ -90,8 +90,12 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
               {table.value}
             </Flex>
           ))}
-          <Heading>Jobs Applied</Heading>
-          <JobList jobs={jobsApplied} />
+          {session?.user.id === user.id && (
+            <>
+              <Heading>Jobs Applied</Heading>
+              <JobList jobs={jobsApplied} />
+            </>
+          )}
         </Flex>
       </Grid>
     </Container>
