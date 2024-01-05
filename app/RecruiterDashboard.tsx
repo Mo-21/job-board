@@ -21,8 +21,8 @@ const RecruiterDashboard = () => {
             {`Hello ${session?.user?.name?.split(
               " ",
               1
-            )}, please update your profile to start applying for jobs. You can update it from`}{" "}
-            <Link href={`/users/profile/edit/${session?.user?.id!}`}>here</Link>
+            )}, please update your profile to start creating jobs. You can update it from`}{" "}
+            <Link href={`/profile/edit/${session?.user?.id!}`}>here</Link>
           </ErrorCallout>
         </div>
       )}
