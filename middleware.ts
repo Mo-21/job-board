@@ -11,5 +11,5 @@ export default withAuth({
 });
 
 export const config = {
-  matcher: ["/users/profile/edit/:id+", "/recruiters"],
+  matcher: ["/profile/edit/:id+"],
 };
