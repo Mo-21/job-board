@@ -6,13 +6,12 @@ import ErrorCallout from "./components/ErrorCallout";
 import Link from "next/link";
 import { useJobs } from "./services/useJobs";
 import JobList from "./components/JobList";
+import RecruiterChart from "./RecruiterChart";
 
 const RecruiterDashboard = () => {
   const { data: session } = useSession();
 
   const { data } = useJobs();
-
-  console.log(data);
 
   return (
     <>
@@ -34,10 +33,12 @@ const RecruiterDashboard = () => {
           gap="4"
           rows={{ initial: "1", sm: "3" }}
         >
-          <Card className="md:col-span-1"></Card>
           <Card className="md:col-span-1">
             <Heading mb="3">Your Jobs</Heading>
-            {data ? <JobList jobs={data} /> : "No Jobs Posted"}
+            {data ? <JobList jobs={data} /> : "No Jobs Posted Yet"}
+          </Card>
+          <Card className="md:col-span-1">
+            {data ? <RecruiterChart jobs={data} /> : "No Jobs Posted Yet"}
           </Card>
           <Card className="md:col-span-1">
             <Heading>Actions</Heading>
