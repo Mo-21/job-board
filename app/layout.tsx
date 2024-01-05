@@ -3,9 +3,9 @@ import { Inter } from "next/font/google";
 import "@radix-ui/themes/styles.css";
 import { Box, Theme } from "@radix-ui/themes";
 import "./globals.css";
-import Navbar from "./Navbar";
 import AuthProvider from "./auth/Provider";
 import ReactQueryProvider from "./ReactQueryProvider";
+import NavbarWrapper from "./NavbarWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +26,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <AuthProvider>
               <main>
-                <Navbar />
+                <NavbarWrapper />
                 <Box>{children}</Box>
               </main>
             </AuthProvider>
