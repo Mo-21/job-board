@@ -2,9 +2,10 @@
 import Spinner from "@/app/components/Spinner";
 import { GlobeIcon, LockClosedIcon } from "@radix-ui/react-icons";
 import { Button, Card, Flex, TextField } from "@radix-ui/themes";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { FormEvent, useRef, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import LoginSkeleton from "./loading";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -42,6 +43,10 @@ const Login = () => {
         setIsSubmitting(false);
       });
   };
+
+  const { data: session, status } = useSession();
+  if (status === "loading") return <LoginSkeleton />;
+  if (session || status === "unauthenticated") return null;
 
   return (
     <Flex justify="center" align="center" className="h-screen">

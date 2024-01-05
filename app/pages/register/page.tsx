@@ -1,9 +1,18 @@
 "use client";
 import { Button, Card, Heading, Flex } from "@radix-ui/themes";
 import styles from "@/app/styles/RegisterPage.module.css";
-import { SubmitHandler, UseFormRegister, UseFormSetValue, useForm } from "react-hook-form";
+import {
+  SubmitHandler,
+  UseFormRegister,
+  UseFormSetValue,
+  useForm,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegistrationFormType, registerSchema, validatePasswords } from "../../validationSchema";
+import {
+  RegistrationFormType,
+  registerSchema,
+  validatePasswords,
+} from "../../validationSchema";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,10 +22,13 @@ import { useState } from "react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import defaultImage from "@/app/assets/default.png";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState<Boolean>();
+
+  const { data: session } = useSession();
 
   const {
     register,
@@ -56,6 +68,8 @@ const Register = () => {
 
   const inputClass =
     "w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3";
+
+  if (session) return null;
 
   return (
     <Flex
