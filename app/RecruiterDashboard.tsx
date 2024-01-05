@@ -35,14 +35,16 @@ const RecruiterDashboard = () => {
         >
           <Card className="md:col-span-1">
             <Heading mb="3">Your Jobs</Heading>
-            {data ? <JobList jobs={data} /> : "No Jobs Posted Yet"}
+            <Flex className="overflow-x-auto" gap="3">
+              {data ? <JobList jobs={data} /> : "No Jobs Posted Yet"}
+            </Flex>
           </Card>
           <Card className="md:col-span-1">
             {data ? <RecruiterChart jobs={data} /> : "No Jobs Posted Yet"}
           </Card>
           <Card className="md:col-span-1">
             <Heading>Actions</Heading>
-            <Flex mt="3" justify="center" align="center">
+            <Flex mt="3" height="100%" justify="center" align="center">
               <Button color="blue">
                 <Link href="/jobs/create">Create a job</Link>
               </Button>

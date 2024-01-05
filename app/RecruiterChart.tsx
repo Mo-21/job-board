@@ -1,8 +1,13 @@
-"use client";
-import { ResponsiveContainer, Bar, BarChart, XAxis, YAxis } from "recharts";
-
-import React, { useEffect, useState } from "react";
 import { Job } from "@prisma/client";
+import { useState, useEffect } from "react";
+import {
+  ResponsiveContainer,
+  Bar,
+  BarChart,
+  XAxis,
+  YAxis,
+  Label,
+} from "recharts";
 
 const RecruiterChart = ({ jobs }: { jobs: Job[] }) => {
   const [data, setData] = useState<{ label: string; number: number }[]>();
@@ -22,7 +27,9 @@ const RecruiterChart = ({ jobs }: { jobs: Job[] }) => {
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={data}>
         <XAxis dataKey="label" />
-        <YAxis />
+        <YAxis domain={[0, "dataMax"]} allowDecimals={false}>
+          <Label value="Number of Applicants" angle={-90} position="center" />
+        </YAxis>
         <Bar
           dataKey="number"
           barSize={60}
