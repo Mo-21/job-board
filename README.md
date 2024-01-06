@@ -17,7 +17,7 @@ This job board application is built using Next.js, TypeScript, and MongoDB. It a
 
 - Rechart: used to show a bar chart for recruiters with their posted jobs and number of candidates applied for each one.
 
-![job-board](./public/recruiter-dashboard.png)
+![job-board](./public/recruiter-dashboards.png)
 
 - react-hook-form: used to manage forms and register input fields.
 
