@@ -46,7 +46,7 @@ const Login = () => {
 
   const { data: session, status } = useSession();
   if (status === "loading") return <LoginSkeleton />;
-  if (session || status === "unauthenticated") return null;
+  if (session) return null;
 
   return (
     <Flex justify="center" align="center" className="h-screen">
