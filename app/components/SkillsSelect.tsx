@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowDownIcon } from "@radix-ui/react-icons";
 import { UseFormSetValue } from "react-hook-form";
 import { UserType } from "../validationSchema";
-import { JobType } from "../jobs/create/page";
+import { JobType } from "../jobs/_components/JobForm";
 
 interface SelectMenuProps {
   setValue?: UseFormSetValue<UserType>;
